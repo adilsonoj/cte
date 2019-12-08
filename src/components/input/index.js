@@ -42,6 +42,8 @@ const Input= (props) => {
             onBlur={ handleBlur }
             secureTextEntry={ props.secureTextEntry }
             autoCorrect={ props.autoCorrect }
+            onChangeText={ props.onChangeText }
+            keyboardType={ props.keyboardType }
         />
     </View>
   );

@@ -23,7 +23,7 @@ export default class DrawerScreen extends Component {
         <ScrollView>
           <View>
             <View  style={[styles.item, (this.props.activeItemKey=='Perfil' ? styles.activeItem : null)]} >
-              <Icon name='sign-out' size={20} style={[styles.icon, (this.props.activeItemKey=='Perfil' ? styles.activeIcon : null)]} />
+              <Icon name='user' size={20} style={[styles.icon, (this.props.activeItemKey=='Perfil' ? styles.activeIcon : null)]} />
               <Text style={[styles.text, (this.props.activeItemKey=='Perfil' ? styles.activeText : null)]} onPress={this.navigateToScreen('Perfil')}>
                 Perfil
               </Text>

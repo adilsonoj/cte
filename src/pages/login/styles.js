@@ -3,10 +3,16 @@ import theme from '../../themes/white'
 
 const styles = StyleSheet.create({
     container:{
-        backgroundColor: theme.background,
+        flex: 1,
+        justifyContent: 'center',
         alignItems: 'center',
         
     },
+    img:{
+        width:200, 
+        height:90,
+        marginBottom: 60
+    }
 });
 
 export default styles;
