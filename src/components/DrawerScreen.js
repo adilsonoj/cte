@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import { ScrollView, Text, View, StyleSheet } from 'react-native';
 
 import { DrawerActions } from 'react-navigation-drawer';
-import { NavigationActions } from 'react-navigation';
+import { NavigationActions,  SwitchActions } from 'react-navigation';
+import firebase from 'react-native-firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Theme from '../themes/white';
 
@@ -14,7 +15,17 @@ export default class DrawerScreen extends Component {
         }); 
         this.props.navigation.dispatch(navigateAction);
         this.props.navigation.dispatch(DrawerActions.closeDrawer())
+    }
+
+    logout = (route) => async () => {
+      const user = firebase.auth().currentUser;
+
+      if (user) {
+        await firebase.auth().signOut();
       }
+      this.props.navigation.dispatch(SwitchActions.jumpTo( {routeName: route} ));
+    }
+
   render() {
    
     return (
@@ -48,7 +59,7 @@ export default class DrawerScreen extends Component {
             </View>
             <View  style={[styles.item, (this.props.activeItemKey=='Lggin' ? styles.activeItem : null)]} >
               <Icon name='sign-out' size={20} style={[styles.icon, (this.props.activeItemKey=='Login' ? styles.activeIcon : null)]} />
-              <Text style={[styles.text, (this.props.activeItemKey=='Login' ? styles.activeText : null)]} onPress={this.navigateToScreen('Login')}>
+              <Text style={[styles.text, (this.props.activeItemKey=='Login' ? styles.activeText : null)]} onPress={this.logout('Login')}>
               Sair
               </Text>
             </View>

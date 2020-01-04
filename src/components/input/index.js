@@ -43,7 +43,9 @@ const Input= (props) => {
             secureTextEntry={ props.secureTextEntry }
             autoCorrect={ props.autoCorrect }
             onChangeText={ props.onChangeText }
+            value={ props.value }
             keyboardType={ props.keyboardType }
+            secureTextEntry = {props.secureTextEntry}
         />
     </View>
   );
