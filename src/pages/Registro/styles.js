@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
         height: 30,
         width: Dimensions.get('window').width-30,
         backgroundColor: '#EEEEEE',
-    }
+    },
+  
 });
 
 export default styles;
