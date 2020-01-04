@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "558879494979",
+    "firebase_url": "https://cteapp-f67e4.firebaseio.com",
+    "project_id": "cteapp-f67e4",
+    "storage_bucket": "cteapp-f67e4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558879494979:android:e177b41ca27915b180d5f6",
+        "android_client_info": {
+          "package_name": "com.cte"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "558879494979-9i5bsjck5ud50h5fga9p87d4dpmkgc7j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDh4aHLyzXgL7UUsP7GledyBlQSvnY618I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "558879494979-9i5bsjck5ud50h5fga9p87d4dpmkgc7j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
