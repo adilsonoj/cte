@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native'
-import { createAppContainer, createSwitchNavigator, NavigationActions } from 'react-navigation';
+import { createAppContainer, createSwitchNavigator, NavigationActions, getActiveChildNavigationOptions } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createStackNavigator, } from 'react-navigation-stack';
 
@@ -12,6 +12,9 @@ import Login from './src/pages/login';
 import Perfil from './src/pages/perfil';
 import Registro from './src/pages/Registro';
 import Logout from './src/routes/Logout';
+import LoginOrHome from './src/pages/LoginOrHome'
+
+import AsyncStorage from '@react-native-community/async-storage';
 
 import theme from './src/themes/white';
 
@@ -61,6 +64,10 @@ const LoginScreen = createSwitchNavigator({
   Login: Login
 });
 
+const LoginOrHomeStack = createSwitchNavigator({
+  LoginOrHome: LoginOrHome
+});
+
 const DrawerStack = createStackNavigator({
   Drawer: DrawerNavigator,
 });
@@ -69,18 +76,26 @@ const RegistroStack = createStackNavigator({
   Registro: {
     screen: Registro,
     navigationOptions: ({ navigation }) => ({
+      headerStyle: {
+        backgroundColor: theme.headerColor,
+      },
+      headerTintColor: theme.headerTextColor,
       title: `Registro`,
     }),
   },
-  
- 
 })
+
+
 
 //responsável pela integracao do DrawerNavigator e MaterialTopTabNavigator
 const AppStackNavigator = createSwitchNavigator({
+  LoginOrHome: LoginOrHomeStack,
   Login:  LoginScreen,
   Registro: RegistroStack,
   Home: DrawerStack,
+},
+{
+  initialRouteName: "LoginOrHome",
 });
 
 export default createAppContainer(AppStackNavigator);
