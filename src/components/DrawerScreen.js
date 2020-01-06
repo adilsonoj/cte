@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import { ScrollView, Text, View, StyleSheet } from 'react-native';
-
+import { ScrollView, Text, View, StyleSheet, StatusBar } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { DrawerActions } from 'react-navigation-drawer';
 import { NavigationActions,  SwitchActions } from 'react-navigation';
 import firebase from 'react-native-firebase';
@@ -22,6 +22,7 @@ export default class DrawerScreen extends Component {
 
       if (user) {
         await firebase.auth().signOut();
+        await AsyncStorage.clear();
       }
       this.props.navigation.dispatch(SwitchActions.jumpTo( {routeName: route} ));
     }
@@ -31,6 +32,7 @@ export default class DrawerScreen extends Component {
     return (
       
     <View>
+        <StatusBar backgroundColor={Theme.primaryDark} barStyle="light-content" />
         <ScrollView>
           <View>
             <View  style={[styles.item, (this.props.activeItemKey=='Perfil' ? styles.activeItem : null)]} >
