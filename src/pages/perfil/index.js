@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { View, Text, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, SafeAreaView, ScrollView, Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import firebase from 'react-native-firebase';
 import styles from './styles';
@@ -24,6 +24,8 @@ const perfil = () => {
         setNome(user.displayName);
         setEmail(user.email);
         setTelefone(user.telefone);
+        const uid = firebase.auth().currentUser.uid
+        console.log(uid)
     }
 
     useEffect(()=>{

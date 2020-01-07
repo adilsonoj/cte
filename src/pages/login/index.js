@@ -8,6 +8,7 @@ import Loader from '../../components/Loader';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Input from '../../components/input';
 import styles from './styles'
+import ButtonConfirm from '../../components/ButtonConfirm'
 import Theme from '../../themes/white';
 
 
@@ -56,9 +57,8 @@ const Login = (props) => {
             <Image source={require('../../../assets/img/cte.png')} style={styles.img}/>
             <Input placeholder="Email" keyboardType='email-address' value={email} onChangeText={email => setEmail(email)} autoFocus={true}/>
             <Input placeholder="Senha" secureTextEntry={true} value={senha} onChangeText={senha => setSenha(senha)}/>
-            <TouchableOpacity style={styles.button} onPress={login}>
-                <Text style={styles.buttonText}>Logar</Text>
-            </TouchableOpacity>
+            <ButtonConfirm text="Entrar" onPress={login}/>
+           
             <TouchableOpacity  onPress={navigateToScreen('Registro')}>
                 <Text style={styles.links}>Registre-se</Text>
             </TouchableOpacity>
