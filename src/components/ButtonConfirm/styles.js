@@ -1,15 +1,10 @@
 import { StyleSheet } from 'react-native'
+import Theme from '../../themes/white'
 
 const styles = StyleSheet.create({
-    container:{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        
-    },
     button:{
         height: 45,
-        backgroundColor: '#069',
+        backgroundColor: Theme.primary,
         alignSelf: 'stretch',
         paddingHorizontal: 20,
         marginLeft: 16,
