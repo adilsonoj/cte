@@ -12,7 +12,8 @@ import Login from './src/pages/login';
 import Perfil from './src/pages/perfil';
 import Registro from './src/pages/Registro';
 import Logout from './src/routes/Logout';
-import LoginOrHome from './src/pages/LoginOrHome'
+import LoginOrHome from './src/pages/LoginOrHome';
+import FeedBack from './src/pages/feedBack';
 
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -87,15 +88,17 @@ const RegistroStack = createStackNavigator({
 
 
 
+
 //responsável pela integracao do DrawerNavigator e MaterialTopTabNavigator
 const AppStackNavigator = createSwitchNavigator({
+  FeedBack: FeedBack,
   LoginOrHome: LoginOrHomeStack,
   Login:  LoginScreen,
   Registro: RegistroStack,
   Home: DrawerStack,
 },
 {
-  initialRouteName: "LoginOrHome",
+  initialRouteName: "FeedBack",
 });
 
 export default createAppContainer(AppStackNavigator);
