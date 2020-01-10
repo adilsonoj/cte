@@ -35,7 +35,7 @@ const Input= (props) => {
     <View style={styles.container}>
         <Animated.Text style={[styles.text, {opacity: opacity, transform: [{translateY: translateY}] }]}>{props.placeholder}</Animated.Text>
         <TextInput 
-            style={ styles.textInput } 
+            style={ [styles.textInput, props.width ? { width: props.width } : {}] } 
             placeholder={ props.placeholder}
             underlineColorAndroid={ isFocused ? theme.primary : '#ccc' }
             onFocus={ handleFocus }
