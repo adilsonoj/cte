@@ -2,22 +2,53 @@ import { StyleSheet, Dimensions } from 'react-native'
 
 
 const styles = StyleSheet.create({
-    modalBackground: {
-        flex: 1,
-        alignItems: 'center',
-        flexDirection: 'column',
-        justifyContent: 'space-around',
-        backgroundColor: '#00000040'
-      },
-      box: {
-        backgroundColor: '#FFFFFF',
-        height: Dimensions.get('window').height * 0.5,
-        width: Dimensions.get('window').width * 0.9,
-        borderRadius: 10,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-around'
-      }
+    container: {
+        padding: 16,
+    },
+    card:{
+      flexDirection: "row",
+      justifyContent: "flex-start",
+      alignItems: "center",
+     
+    },
+    input:{
+      borderWidth: 1,
+      borderColor: '#ccc',
+      height: 30,
+      width: 60,
+      padding: 6,
+      fontSize: 16,
+      
+    },
+    cardInput:{
+      flexDirection: "row",
+      alignItems: "center",
+      paddingRight: 12
+    },
+    picker:{
+      height: 30, width: 100
+    },
+    label:{
+      fontSize: 16,
+      fontWeight:"bold",
+      paddingBottom: 12,
+      paddingTop:12
+    },
+    data:{
+      borderWidth: 1,
+      borderColor: '#ccc',
+      height: 30,
+      padding: 6,
+      fontSize: 16,
+    },
+    inputObs:{
+      borderWidth: 1,
+      borderColor: '#ccc',
+      height: 60,
+      padding: 6,
+      fontSize: 16,
+    }
+      
 })
 
 
