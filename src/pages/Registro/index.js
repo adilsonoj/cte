@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-import { View, SafeAreaView, ScrollView, Alert, ActivityIndicator, Modal } from 'react-native';
+import { View, SafeAreaView, ScrollView, Alert } from 'react-native';
 import { validateEmail } from '../../common/validate'
 import firebase from 'react-native-firebase';
-import { SwitchActions } from 'react-navigation';
+
 
 import styles from './styles';
 import Input from '../../components/input';

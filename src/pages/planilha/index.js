@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Text, SafeAreaView, ScrollView } from 'react-native';
-
+import { View, Text, SafeAreaView, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { SwitchActions } from 'react-navigation';
 import styles from './styles';
 
-const planilha = () => {
+const planilha = (props) => {
   return (
     <SafeAreaView >
         <ScrollView >
@@ -35,7 +35,11 @@ const planilha = () => {
             <View style={styles.container}>
                 <View style={styles.header}>
                     <Text style={styles.headerText}>Semana 5 - Dia 1</Text>
-                    <Text style={styles.headerFeedBack}>feedBack</Text>
+                    <TouchableWithoutFeedback onPress={()=> { props.navigation.dispatch(SwitchActions.jumpTo( {routeName: 'FeedBack'} ))}} >
+                        <Text style={styles.headerFeedBack}>feedBack</Text>
+                    
+                    </TouchableWithoutFeedback>
+                   
                 </View>
                 <View style={styles.planilhaContainer}>
                     <View style={styles.box}>
