@@ -8,7 +8,7 @@ const ButtonConfirm = (props) =>{
                 
                 <TouchableOpacity style={[styles.button,  
                     props.color ? {backgroundColor: props.color} : {},
-                 props.width ? {width: props.width} : {}]} 
+                    props.width ? {width: props.width} : {}]} 
                  onPress={props.onPress}>
                     <Text style={styles.buttonText}>{props.text}</Text>
                 </TouchableOpacity>
