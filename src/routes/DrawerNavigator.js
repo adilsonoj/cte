@@ -7,7 +7,7 @@ import { createStackNavigator, } from 'react-navigation-stack';
 import Sobre from '../pages/about';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import TabNavigator from '../routes/TabNavigator';
-import DrawerScreen from '../components/DrawerScreen';
+import DrawerScreen from '../components/DrawerSceen';
 import Login from '../pages/login';
 import Perfil from '../pages/perfil';
 import Registro from '../pages/Registro';
