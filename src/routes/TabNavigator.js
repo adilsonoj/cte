@@ -2,8 +2,6 @@ import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
 import Historico from '../pages/historico';
 import Planilha from '../pages/planilha';
-import FeedBack from '../pages/feedBack';
-
 import theme from '../themes/white';
 
 const TabScreen = createMaterialTopTabNavigator(
