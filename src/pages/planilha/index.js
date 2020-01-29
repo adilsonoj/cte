@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, SafeAreaView, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { SwitchActions } from 'react-navigation';
+import { NavigationActions } from 'react-navigation';
 import styles from './styles';
 
 const planilha = (props) => {
@@ -10,7 +11,9 @@ const planilha = (props) => {
             <View style={styles.container}>
                 <View style={styles.header}>
                     <Text style={[styles.font, styles.headerText]}>Semana 5 - Dia 1</Text>
+                    <TouchableWithoutFeedback onPress={()=> { props.navigation.dispatch(NavigationActions.navigate({routeName: 'Registro'}))}}> 
                     <Text style={styles.headerFeedBack}>feedBack</Text>
+                    </TouchableWithoutFeedback>
                 </View>
                 <View style={styles.planilhaContainer}>
                     <View style={styles.box}>
@@ -35,7 +38,7 @@ const planilha = (props) => {
             <View style={styles.container}>
                 <View style={styles.header}>
                     <Text style={styles.headerText}>Semana 5 - Dia 1</Text>
-                    <TouchableWithoutFeedback onPress={()=> { props.navigation.dispatch(SwitchActions.jumpTo( {routeName: 'FeedBack'} ))}} >
+                    <TouchableWithoutFeedback onPress={()=> { props.navigation.dispatch(NavigationActions.navigate({routeName: 'FeedBack'}))}}> 
                         <Text style={styles.headerFeedBack}>feedBack</Text>
                     
                     </TouchableWithoutFeedback>

@@ -17,6 +17,10 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width-30,
         backgroundColor: '#EEEEEE',
     },
+    button:{
+        width: Dimensions.get('screen').width,
+        paddingHorizontal: 16
+    },
   
 });
 

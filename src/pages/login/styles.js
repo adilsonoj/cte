@@ -3,7 +3,7 @@ import theme from '../../themes/white'
 
 const styles = StyleSheet.create({
     container:{
-        flex: 1,
+        flex:1,
         justifyContent: 'center',
         alignItems: 'center',
         
@@ -14,18 +14,8 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     button:{
-        height: 45,
-        backgroundColor: '#069',
-        alignSelf: 'stretch',
-        paddingHorizontal: 20,
-        marginLeft: 16,
-        marginRight: 16,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    buttonText:{
-        color: '#fff',
-        fontWeight: 'bold'
+        width: Dimensions.get('screen').width,
+        paddingHorizontal: 16
     },
     links:{
         paddingTop: 16,

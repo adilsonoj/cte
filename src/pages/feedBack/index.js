@@ -2,30 +2,35 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, SafeAreaView, ScrollView,TouchableWithoutFeedback,TextInput, Button } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
+import theme from '../../themes/white';
 require('moment/locale/pt-br');
 
 import { openDialog } from 'rn-android-picker-dialog';
 
 import styles from './styles';
 
-const feedBack = () => {
+const feedBack = (props) => {
+  console.log("feedback: ", props.navigation.navigationOptions)
 
-      const [aquecimento, setAquecimento] = useState('');
-      const [desenvolvimento, setDesenvolvimento ] = useState('');
-      const [fcMaxima, setFcMaxima] = useState('');
-      const [pace, setPace] = useState('');
-      const [tempo, setTempo] = useState('');
-      const [data, setData] = useState(new Date());
-      const [show, setShow] = useState(false);
-      const [observacao, setObservacao] = useState('');
-      const [vo2, setVo2] = useState('');
-      const [disabledButton, setDisabledButton] = useState(true)
-   
+  const [aquecimento, setAquecimento] = useState('');
+  const [desenvolvimento, setDesenvolvimento ] = useState('');
+  const [fcMaxima, setFcMaxima] = useState('');
+  const [pace, setPace] = useState('');
+  const [tempo, setTempo] = useState('');
+  const [data, setData] = useState(new Date());
+  const [show, setShow] = useState(false);
+  const [observacao, setObservacao] = useState('');
+  const [vo2, setVo2] = useState('');
+  const [disabledButton, setDisabledButton] = useState(true)
+  useEffect(()=>{
+    //props.navigation.actions.goBack()
+
+ },[])
       useEffect(()=>{
         let h;
         let d;
         let pace = 0.0;
-        let decimal
+        let decimal;
         if(desenvolvimento && tempo){
           h = (((tempo.h * 60) * 60) + (tempo.m * 60) + (tempo.s * 1) ) / 60
           d = ((desenvolvimento.km / 1000) + desenvolvimento.m) * 1000
@@ -35,11 +40,6 @@ const feedBack = () => {
           setPace({...pace, m:Math.floor(pace), s: decimal})
           setDisabledButton(false)
         }
-        console.log("h ",h)
-        console.log(d)
-        console.log("pace: ",Math.floor(pace))
-        console.log("decimal: ", decimal*0.01)
-
        
       },[desenvolvimento, tempo])
 
@@ -185,7 +185,7 @@ const feedBack = () => {
                       onChange={changeData} />
             }
             <View style={{padding: 16}}>
-              <Button  color='#069'title="Enviar" onPress={()=>{}} disabled={disabledButton} />
+              <Button  color={theme.button}title="Enviar" onPress={()=>{}} disabled={disabledButton} />
             </View>
       </ScrollView>
     </SafeAreaView>

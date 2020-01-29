@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { View, SafeAreaView, ScrollView, Alert } from 'react-native';
+import { View, SafeAreaView, ScrollView, Alert, Button } from 'react-native';
 import { validateEmail } from '../../common/validate'
 import firebase from 'react-native-firebase';
 
@@ -9,6 +9,7 @@ import styles from './styles';
 import Input from '../../components/input';
 import ButtonConfirm from '../../components/ButtonConfirm';
 import Loader from '../../components/Loader';
+import Theme from '../../themes/white'
 
 
 const Registro = (props) => {
@@ -49,16 +50,18 @@ const Registro = (props) => {
     }
 
     return(
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
         <ScrollView >
-            <View style={styles.container}>
+            <View >
                 <Loader loading={loading}/>
                 <Input placeholder="Nome" onChangeText={nome => setNome(nome)}/>
                 <Input placeholder="Email" onChangeText={email => setEmail(email)} keyboardType="email-address"/>
                 <Input placeholder="Senha" secureTextEntry={true} autoCorrect={false} onChangeText={senha => setSenha(senha)}/>
                 <Input placeholder="Confirme a Senha" secureTextEntry={true} autoCorrect={false} onChangeText={confirmeSenha => setConfirmeSenha(confirmeSenha)}/>
             </View>
-            <ButtonConfirm text="Registrar" onPress={registrar}/>
+            <View style={styles.button}>
+                <Button title="Entrar" color={Theme.button}  onPress={registrar}/>
+            </View>
         </ScrollView>
     </SafeAreaView>
 )};
