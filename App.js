@@ -23,7 +23,7 @@ const DrawerNavigator = createDrawerNavigator({
   CTE: TabNavigator,
   Sobre,
   Perfil,
-  Logout
+  Logout,
 },
 
 {
@@ -31,13 +31,10 @@ const DrawerNavigator = createDrawerNavigator({
   drawerBackgroundColor: '#FFFFFF',
   contentComponent: DrawerScreen,
   navigationOptions:({ navigation })=>({
-    
     headerStyle: {
       backgroundColor: theme.headerColor,
     },
     headerTintColor: theme.headerTextColor,
-    
-    //headerTitle:(<Image source={headerTitle} resizeMode='cover' style={{width:38, height:16, resizeMode: 'contain', alignSelf: 'center'}}/>),
     title: getTitle(navigation),
     headerRight: (
       <TouchableOpacity style={{marginRight: 16}} onPress={()=>{navigation.dispatch( NavigationActions.navigate({
@@ -50,55 +47,61 @@ const DrawerNavigator = createDrawerNavigator({
       <TouchableOpacity style={{marginLeft: 16}} onPress={navigation.toggleDrawer}>
         <Icon name="bars" size={20} color={theme.iconColor}  />
       </TouchableOpacity>
-      
     ),
- 
   })
 });
 
 const getTitle = (navigation)=>{
   let { index } = navigation.state; 
-  return navigation.state.routes[index].key
+  return navigation.state.routes[index].routeName
 }
-
-const LoginScreen = createSwitchNavigator({
-  Login: Login
-});
-
-const LoginOrHomeStack = createSwitchNavigator({
-  LoginOrHome: LoginOrHome
-});
 
 const DrawerStack = createStackNavigator({
   Drawer: DrawerNavigator,
 });
 
-const RegistroStack = createStackNavigator({
-  Registro: {
+//responsável pela integracao do DrawerNavigator e MaterialTopTabNavigator
+const AppStackNavigator = createStackNavigator({
+  LoginOrHome: { 
+    screen: LoginOrHome,
+    navigationOptions: ({ navigation })=>({
+      header: null,
+    })
+  } ,
+  Login:  { 
+    screen: Login,
+    navigationOptions: ({ navigation })=>({
+      header: null,
+    })
+  } ,
+  Registro: { 
     screen: Registro,
-    navigationOptions: ({ navigation }) => ({
-      headerStyle: {
-        backgroundColor: theme.headerColor,
-      },
-      headerTintColor: theme.headerTextColor,
+    navigationOptions: ()=>({
       title: `Registro`,
+    })
+  },
+  Home: {
+    screen: DrawerStack,
+    navigationOptions: ({ navigation }) => ({
+      header: null,
+    })  
+  },
+  FeedBack: {
+    screen: FeedBack,
+    navigationOptions: ({ navigation }) => ({
+      title: `FeedBack`, 
     }),
   },
-})
-
-
-
-
-//responsável pela integracao do DrawerNavigator e MaterialTopTabNavigator
-const AppStackNavigator = createSwitchNavigator({
-  FeedBack: FeedBack,
-  LoginOrHome: LoginOrHomeStack,
-  Login:  LoginScreen,
-  Registro: RegistroStack,
-  Home: DrawerStack,
 },
 {
-  initialRouteName: "FeedBack",
+  
+  initialRouteName: "LoginOrHome",
+  defaultNavigationOptions:({ navigation })=>({
+    headerStyle: {
+      backgroundColor: theme.headerColor,
+    },
+    headerTintColor: theme.headerTextColor,
+  })
 });
 
 export default createAppContainer(AppStackNavigator);

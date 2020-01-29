@@ -1,6 +1,8 @@
-import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
+import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
+import { createStackNavigator } from 'react-navigation-stack';
 import Historico from '../pages/historico';
 import Planilha from '../pages/planilha';
+import FeedBack from '../pages/feedBack';
 
 import theme from '../themes/white';
 
@@ -39,6 +41,14 @@ const TabScreen = createMaterialTopTabNavigator(
   }
 );
 
+const RootTabStack = createStackNavigator({
+  TabScreen: {
+    screen: TabScreen,
+    navigationOptions:()=>({
+      header: null
+    })
+  },
+ 
+})
 
-
-export default TabScreen;
+export default RootTabStack;
