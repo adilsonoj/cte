@@ -5,17 +5,22 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         justifyContent: 'center',
+        paddingHorizontal: 16
+    },
+    viewImg:{
+        justifyContent: 'center',
         alignItems: 'center',
-        
+        paddingVertical: 16,
     },
     img:{
         width:100, 
         height:45,
-        marginBottom: 10
     },
     button:{
-        width: Dimensions.get('screen').width,
-        paddingHorizontal: 16
+        paddingVertical: 16
+    },
+    viewLinks:{
+        alignItems: 'center',
     },
     links:{
         paddingTop: 16,

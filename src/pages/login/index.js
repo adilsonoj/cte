@@ -51,20 +51,23 @@ const Login = (props) => {
             
             <StatusBar backgroundColor={Theme.primaryDark} barStyle="light-content" />
             <Loader loading={loading}/>
-            <Image source={require('../../../assets/img/cte.png')} style={styles.img}/>
+            <View style={styles.viewImg}>
+                <Image source={require('../../../assets/img/cte.png')} style={styles.img}/>
+            </View>
             <Input placeholder="Email" keyboardType='email-address' value={email} onChangeText={email => setEmail(email)} autoFocus={true}/>
             <Input placeholder="Senha" secureTextEntry={true} value={senha} onChangeText={senha => setSenha(senha)}/>
 
             <View style={styles.button}>
                 <Button title="Entrar" color={Theme.button}/>
             </View>
-           
-            <TouchableOpacity  onPress={navigateToScreen('Registro')}>
-                <Text style={styles.links}>Registre-se</Text>
-            </TouchableOpacity>
-            <TouchableOpacity  onPress={()=>{}}>
-                <Text style={styles.links}>Escqueceu a senha?</Text>
-            </TouchableOpacity>
+           <View style={styles.viewLinks}>
+                <TouchableOpacity  onPress={navigateToScreen('Registro')}>
+                    <Text style={styles.links}>Registre-se</Text>
+                </TouchableOpacity>
+                <TouchableOpacity  onPress={()=>{}}>
+                    <Text style={styles.links}>Escqueceu a senha?</Text>
+                </TouchableOpacity>
+           </View>
         </SafeAreaView>
     )
    

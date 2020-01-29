@@ -52,13 +52,11 @@ const Registro = (props) => {
     return(
     <SafeAreaView style={styles.container}>
         <ScrollView >
-            <View >
-                <Loader loading={loading}/>
-                <Input placeholder="Nome" onChangeText={nome => setNome(nome)}/>
-                <Input placeholder="Email" onChangeText={email => setEmail(email)} keyboardType="email-address"/>
-                <Input placeholder="Senha" secureTextEntry={true} autoCorrect={false} onChangeText={senha => setSenha(senha)}/>
-                <Input placeholder="Confirme a Senha" secureTextEntry={true} autoCorrect={false} onChangeText={confirmeSenha => setConfirmeSenha(confirmeSenha)}/>
-            </View>
+            <Loader loading={loading}/>
+            <Input placeholder="Nome" onChangeText={nome => setNome(nome)}/>
+            <Input placeholder="Email" onChangeText={email => setEmail(email)} keyboardType="email-address"/>
+            <Input placeholder="Senha" secureTextEntry={true} autoCorrect={false} onChangeText={senha => setSenha(senha)}/>
+            <Input placeholder="Confirme a Senha" secureTextEntry={true} autoCorrect={false} onChangeText={confirmeSenha => setConfirmeSenha(confirmeSenha)}/>
             <View style={styles.button}>
                 <Button title="Entrar" color={Theme.button}  onPress={registrar}/>
             </View>

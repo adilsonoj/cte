@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
-import { View, Text, SafeAreaView, ScrollView, Alert } from 'react-native';
+import { View, Text, SafeAreaView, ScrollView, Button, TouchableWithoutFeedback } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-community/async-storage';
 import firebase from 'react-native-firebase';
 import styles from './styles';
 import Input from '../../components/input';
 import ImagemPerfil from '../../components/imagemPerfil';
-import ButtonConfirm from '../../components/ButtonConfirm';
+import theme from '../../themes/white'
+import moment from 'moment';
+require('moment/locale/pt-br');
 
 const perfil = () => {
     const [nome, setNome] = useState('');
@@ -14,11 +17,14 @@ const perfil = () => {
     const [idade, setIdade] = useState('');
     const [peso, setPeso] = useState('');
     const [distancia, setDistancia] = useState('');
-    const [data, setData] = useState('');
-    const [telefone, setTelefone] = useState();
+    const [data, setData] = useState(new Date());
+    const [show, setShow] = useState(false);
 
     const onLoad = async ()=>{
         let user = await AsyncStorage.getItem('user');
+
+        if(!user) return
+
         user = JSON.parse(user).providerData[0];
         console.log(user)
         setNome(user.displayName);
@@ -32,6 +38,11 @@ const perfil = () => {
         onLoad();
     },[]);
 
+    const changeData = (event, date)=>{
+        date = date || data;
+        setShow(false);
+        setData(date);
+      }
     const onUpdate = async () => {
         await firebase.auth().currentUser.updateProfile({
             photoURL: '',
@@ -41,25 +52,36 @@ const perfil = () => {
     }
     
     return (
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
             <ScrollView >
-                <View style={styles.container}>
-                    <ImagemPerfil />
+                    <View style={styles.imgPerfil}>
+                        <ImagemPerfil />
+                    </View>
                     <Input placeholder="Nome" onChangeText={nome => setNome(nome)} value={nome}/>
                     <Input placeholder="Email" onChangeText={email => setEmail(email)} value={email} keyboardType="email-address"/>
-                    {/* <Input placeholder="Telefone" onChangeText={telefone => setTelefone(telefone)} value={telefone} keyboardType="numeric"/> */}
-                    <Input placeholder="Idade" onChangeText={idade => setIdade(idade)} value={idade}/>
-                    <Input placeholder="Peso" onChangeText={peso => setPeso(peso)} value={peso} />
+                    <Input placeholder="Idade" onChangeText={idade => setIdade(idade)} value={idade} keyboardType="numeric"/>
+                    <Input placeholder="Peso (kg)" onChangeText={peso => setPeso(peso)} value={peso}  keyboardType="numeric"/>
                     <View style={styles.header}>
                         <Text >OBJETIVO</Text>
                     </View>
                     
-                    <Input placeholder="Distância" onChangeText={distancia => setDistancia(distancia)} value={distancia} />
-                    <Input placeholder="Data" onChangeText={data => setData(data)} value={data} />
+                    <Input placeholder="Distância (km)" onChangeText={distancia => setDistancia(distancia)} value={distancia}  keyboardType="numeric"/>
+                    <TouchableWithoutFeedback onPress={()=>setShow(true)}>
+                        <View style={styles.card}> 
+                            <Text style={styles.text}>{moment(data).format('D [de] MMMM [de] YYYY')}</Text>
+                        </View>
+                    </TouchableWithoutFeedback>
                     {/* <Input placeholder="Senha" secureTextEntry={true} autoCorrect={false}/> */}
                     
+                
+                <View style={styles.button}>
+                    <Button title="Salvar" color={theme.button} onPress={onUpdate}/>
                 </View>
-                <ButtonConfirm text="Salvar" onPress={onUpdate}/>
+                { show && <DateTimePicker value={data}
+                      is24Hour={true}
+                      display="default"
+                      onChange={changeData} />
+            }
             </ScrollView>
         </SafeAreaView>
     )};
