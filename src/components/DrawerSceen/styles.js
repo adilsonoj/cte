@@ -7,10 +7,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems:'center',
-        padding: 10,
-        height: 40,
-        borderBottomWidth: 0.5,
-        borderColor: Theme.primary,
+        padding: 16,
+        height: 50,
+        
     },
 
     text: {
@@ -18,6 +17,8 @@ const styles = StyleSheet.create({
       color: '#424242'
     },
     icon:{
+      
+      width: 25,
       color: '#424242'
     },
     activeItem:{

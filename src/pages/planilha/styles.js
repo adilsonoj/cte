@@ -3,31 +3,30 @@ import theme from '../../themes/white'
 
 const styles = StyleSheet.create({
     container:{
+        flex:1,
         backgroundColor: theme.background,
-        alignItems: 'center',
+        paddingVertical:16,
+        paddingHorizontal: 16,
     },
     header:{
         flexDirection: 'row',
         backgroundColor: theme.backgroundCard,
-        width: Dimensions.get('window').width * 0.95,
         height: 30,
         alignItems: 'center',
         justifyContent: 'space-between',
         marginBottom: 5
     },
     planilhaContainer:{
-        width: Dimensions.get('window').width * 0.95,
         flexDirection: "row",
-        flexWrap: 'wrap',
         justifyContent: 'space-between',
     },
     box:{
-        width: (Dimensions.get('window').width * 0.94) / 2,
+        width: (Dimensions.get('screen').width)  / 2 - 18,
         height: 50,
         alignItems: 'center',
         backgroundColor: theme.backgroundCard,
         marginBottom: 5,
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     headerText:{
         fontWeight: 'bold',

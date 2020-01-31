@@ -34,7 +34,7 @@ const initialState = [
                 <View key={historico.id} style={styles.card}>
                    
                 <View style={styles.cardHeader}>
-                    <Text style={styles.cardHeader}>Semama {historico.semana} - Dia {historico.dia}</Text>
+                    <Text style={styles.cardHeaderTitle}>Semama {historico.semana} - Dia {historico.dia}</Text>
                 </View>
                 
                 <View style={styles.cardContainer}>
