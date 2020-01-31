@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, ScrollView, SafeAreaView, FlatList } from 'react-native';
 import styles from './styles'
 
 const initialState = [
@@ -20,7 +20,16 @@ const initialState = [
         tempo: '1h30m',
         ritimo: '5,2',
         fc: 70
-    }
+    },
+    {
+        id:3,
+        semana: 5,
+        dia: 2,
+        distancia: 11,
+        tempo: '1h30m',
+        ritimo: '5,2',
+        fc: 70
+    },
 ]
 
  const historico = () => {
@@ -28,38 +37,39 @@ const initialState = [
 
   return (
       <SafeAreaView style={styles.container}>
-        <ScrollView >
-            
-            {historicos.map(historico=>(
-                <View key={historico.id} style={styles.card}>
+            <FlatList 
+                data={historicos} 
+                keyExtractor={item => item.id.toString()}
+                renderItem={({ item }) => 
+                    <View style={styles.card}>
                    
-                <View style={styles.cardHeader}>
-                    <Text style={styles.cardHeaderTitle}>Semama {historico.semana} - Dia {historico.dia}</Text>
-                </View>
-                
-                <View style={styles.cardContainer}>
-                    <View style={styles.box}>
-                        <Text style={styles.cardTitle}>Distância</Text>
-                        <Text style={styles.cardValue}>{historico.distancia}km</Text>
+                        <View style={styles.cardHeader}>
+                            <Text style={styles.cardHeaderTitle}>Semama {historico.semana} - Dia {item.dia}</Text>
+                        </View>
+                        
+                        <View style={styles.cardContainer}>
+                            <View style={styles.box}>
+                                <Text style={styles.cardTitle}>Distância</Text>
+                                <Text style={styles.cardValue}>{item.distancia}km</Text>
+                            </View>
+                            <View style={styles.box}>
+                                <Text style={styles.cardTitle}>Tempo</Text>
+                                <Text style={styles.cardValue}>{item.tempo}</Text>
+                            </View>
+                            <View style={styles.box}>
+                                <Text style={styles.cardTitle}>Ritimo</Text>
+                                <Text style={styles.cardValue}>{item.ritimo}km/h</Text>
+                            </View>
+                            <View style={styles.box}>
+                                <Text style={styles.cardTitle}>FC</Text>
+                                <Text style={styles.cardValue}>{item.fc}bpm</Text>
+                            </View>
+                            
+                        </View>
+                   
                     </View>
-                    <View style={styles.box}>
-                        <Text style={styles.cardTitle}>Tempo</Text>
-                        <Text style={styles.cardValue}>{historico.tempo}</Text>
-                    </View>
-                    <View style={styles.box}>
-                        <Text style={styles.cardTitle}>Ritimo</Text>
-                        <Text style={styles.cardValue}>{historico.ritimo}km/h</Text>
-                    </View>
-                    <View style={styles.box}>
-                        <Text style={styles.cardTitle}>FC</Text>
-                        <Text style={styles.cardValue}>{historico.fc}bpm</Text>
-                    </View>
-                    
-                </View>
-               
-            </View>
-            ))}
-        </ScrollView>
+                }
+            />
       </SafeAreaView>
   );
 }
