@@ -4,7 +4,7 @@ import { ScrollView, Text, View, StatusBar } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { DrawerActions } from 'react-navigation-drawer';
 import { NavigationActions,  SwitchActions } from 'react-navigation';
-import firebase from 'react-native-firebase';
+import auth from '@react-native-firebase/auth';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Theme from '../../themes/white';
 import styles from './styles';
@@ -19,13 +19,13 @@ export default class DrawerScreen extends Component {
     }
 
     logout = (route) => async () => {
-      const user = firebase.auth().currentUser;
+      const user = auth().currentUser;
 
       if (user) {
-        await firebase.auth().signOut();
+        await auth().signOut();
         await AsyncStorage.clear();
       }
-      this.props.navigation.dispatch(SwitchActions.jumpTo( {routeName: route} ));
+      this.props.navigation.dispatch( NavigationActions.navigate({ routeName: route }));
     }
 
   render() {

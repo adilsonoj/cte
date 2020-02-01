@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, SafeAreaView, ScrollView, Button, TouchableWithoutFeedback } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-community/async-storage';
-import firebase from 'react-native-firebase';
+import auth from '@react-native-firebase/auth';
 import styles from './styles';
 import Input from '../../components/input';
 import ImagemPerfil from '../../components/imagemPerfil';
@@ -44,10 +44,10 @@ const perfil = () => {
         setData(date);
       }
     const onUpdate = async () => {
-        await firebase.auth().currentUser.updateProfile({
+        await auth().currentUser.updateProfile({
             photoURL: '',
         });
-        const user = firebase.auth().currentUser
+        const user = auth().currentUser
         console.log(user)
     }
     

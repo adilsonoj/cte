@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, SafeAreaView, Image, TouchableOpacity, Alert, StatusBar, Button, View } from 'react-native';
 import { NavigationActions } from 'react-navigation';
-import firebase from 'react-native-firebase';
+import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-community/async-storage';
 import { validateEmail } from '../../common/validate'
 import Loader from '../../components/Loader';
@@ -23,13 +23,11 @@ const Login = (props) => {
                 return
             }
             setLoading(true)
-            const { user } = await firebase.auth().signInWithEmailAndPassword(email, senha);
+            const { user } = await auth().signInWithEmailAndPassword(email, senha);
            // console.log(user)
             await AsyncStorage.setItem('user', JSON.stringify(user));
 
-            props.navigation.dispatch(NavigationActions.navigate({
-                routeName: 'Home'
-              }))
+            props.navigation.navigate("Home")
             
         } catch (error) {
             console.log(error);
@@ -58,7 +56,7 @@ const Login = (props) => {
             <Input placeholder="Senha" secureTextEntry={true} value={senha} onChangeText={senha => setSenha(senha)}/>
 
             <View style={styles.button}>
-                <Button title="Entrar" color={Theme.button}/>
+                <Button title="Entrar" color={Theme.button} onPress={login}/>
             </View>
            <View style={styles.viewLinks}>
                 <TouchableOpacity  onPress={navigateToScreen('Registro')}>
