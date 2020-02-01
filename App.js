@@ -86,12 +86,25 @@ const RegistroStack = createStackNavigator({
   },
 })
 
+const FeedBackStack = createStackNavigator({
+  Registro: {
+    screen: FeedBack,
+    navigationOptions: ({ navigation }) => ({
+      headerStyle: {
+        backgroundColor: theme.headerColor,
+      },
+      headerTintColor: theme.headerTextColor,
+      title: `FeedBack`,
+    }),
+  },
+})
+
 
 
 
 //responsável pela integracao do DrawerNavigator e MaterialTopTabNavigator
 const AppStackNavigator = createSwitchNavigator({
-  FeedBack: FeedBack,
+  FeedBack: FeedBackStack,
   LoginOrHome: LoginOrHomeStack,
   Login:  LoginScreen,
   Registro: RegistroStack,
