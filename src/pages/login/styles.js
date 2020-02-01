@@ -3,29 +3,24 @@ import theme from '../../themes/white'
 
 const styles = StyleSheet.create({
     container:{
-        flex: 1,
+        flex:1,
+        justifyContent: 'center',
+        paddingHorizontal: 16
+    },
+    viewImg:{
         justifyContent: 'center',
         alignItems: 'center',
-        
+        paddingVertical: 16,
     },
     img:{
         width:100, 
         height:45,
-        marginBottom: 10
     },
     button:{
-        height: 45,
-        backgroundColor: '#069',
-        alignSelf: 'stretch',
-        paddingHorizontal: 20,
-        marginLeft: 16,
-        marginRight: 16,
-        justifyContent: 'center',
-        alignItems: 'center'
+        paddingVertical: 16
     },
-    buttonText:{
-        color: '#fff',
-        fontWeight: 'bold'
+    viewLinks:{
+        alignItems: 'center',
     },
     links:{
         paddingTop: 16,

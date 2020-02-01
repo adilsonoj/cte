@@ -15,13 +15,9 @@ const LoginOrHome = (props)=>{
       try {
             const user = await AsyncStorage.getItem('user');
            if(user){
-              props.navigation.dispatch(NavigationActions.navigate({
-                  routeName: 'Home'
-                }))
+              props.navigation.navigate("Home");
            }else{
-              props.navigation.dispatch(NavigationActions.navigate({
-                  routeName: 'Login'
-                }))
+              props.navigation.navigate("Login")
            }
       } catch (error) {
         console.log(error)

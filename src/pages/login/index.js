@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, SafeAreaView, Image, TouchableOpacity, Alert, StatusBar } from 'react-native';
+import { Text, SafeAreaView, Image, TouchableOpacity, Alert, StatusBar, Button, View } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import firebase from 'react-native-firebase';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -8,10 +8,7 @@ import Loader from '../../components/Loader';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Input from '../../components/input';
 import styles from './styles'
-import ButtonConfirm from '../../components/ButtonConfirm'
 import Theme from '../../themes/white';
-
-
 
 const Login = (props) => {
     const [email, setEmail] = useState('adilsonoj@yahoo.com.br');
@@ -21,7 +18,6 @@ const Login = (props) => {
         try {
             if(!email && !senha) return
 
-            
             if(!validateEmail(email)) {
                 Alert.alert('Erro','Email inválido')
                 return
@@ -52,19 +48,26 @@ const Login = (props) => {
     };
     return(
         <SafeAreaView style={styles.container}>
+            
             <StatusBar backgroundColor={Theme.primaryDark} barStyle="light-content" />
             <Loader loading={loading}/>
-            <Image source={require('../../../assets/img/cte.png')} style={styles.img}/>
+            <View style={styles.viewImg}>
+                <Image source={require('../../../assets/img/cte.png')} style={styles.img}/>
+            </View>
             <Input placeholder="Email" keyboardType='email-address' value={email} onChangeText={email => setEmail(email)} autoFocus={true}/>
             <Input placeholder="Senha" secureTextEntry={true} value={senha} onChangeText={senha => setSenha(senha)}/>
-            <ButtonConfirm text="Entrar" onPress={login}/>
-           
-            <TouchableOpacity  onPress={navigateToScreen('Registro')}>
-                <Text style={styles.links}>Registre-se</Text>
-            </TouchableOpacity>
-            <TouchableOpacity  onPress={()=>{}}>
-                <Text style={styles.links}>Escqueceu a senha?</Text>
-            </TouchableOpacity>
+
+            <View style={styles.button}>
+                <Button title="Entrar" color={Theme.button}/>
+            </View>
+           <View style={styles.viewLinks}>
+                <TouchableOpacity  onPress={navigateToScreen('Registro')}>
+                    <Text style={styles.links}>Registre-se</Text>
+                </TouchableOpacity>
+                <TouchableOpacity  onPress={()=>{}}>
+                    <Text style={styles.links}>Escqueceu a senha?</Text>
+                </TouchableOpacity>
+           </View>
         </SafeAreaView>
     )
    

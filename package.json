@@ -22,7 +22,8 @@
     "react-navigation": "4.0.4",
     "react-navigation-drawer": "2.2.1",
     "react-navigation-stack": "1.7.3",
-    "react-navigation-tabs": "2.5.1"
+    "react-navigation-tabs": "2.5.1",
+    "rn-android-picker-dialog": "^1.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",

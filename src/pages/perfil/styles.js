@@ -3,19 +3,33 @@ import theme from '../../themes/white'
 
 const styles = StyleSheet.create({
     container:{
-        //backgroundColor: theme.background,
-        paddingTop: 15,
-        alignItems: 'center',
-        
+       paddingVertical: 16,
+       paddingHorizontal: 16,
     },
     header:{
         justifyContent:'center',
         marginTop: 10,
         marginBottom:10,
-        paddingLeft:6,
         height: 30,
-        width: Dimensions.get('window').width-30,
+        paddingLeft: 6,
         backgroundColor: '#EEEEEE',
+    },
+    button:{
+        paddingVertical:16
+    },
+    card:{
+        flexDirection: "row",
+        alignItems: "flex-end",
+        height: 50,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+        paddingLeft: 6
+    },
+    imgPerfil:{
+        alignItems: 'center'
+    },
+    text: {
+        fontSize: 16
     }
 });
 

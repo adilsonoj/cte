@@ -3,22 +3,24 @@ import theme from '../../themes/white'
 
 const styles = StyleSheet.create({
     container:{
+        flex: 1,
         backgroundColor: theme.background,
-        alignItems: 'center',
+        paddingVertical:16,
+        paddingHorizontal: 16,
         
     },
     card: {
         justifyContent: 'space-around',
-        width: Dimensions.get('window').width * 0.95,
         height: 100,
         backgroundColor: theme.backgroundCard,
         marginBottom: 5,
-        marginTop: 5,
         borderRadius: 5
 
     },
     cardHeader: {
         alignItems: 'center',
+    },
+    cardHeaderTitle: {
         fontFamily: theme.font
     },
     cardContainer: {

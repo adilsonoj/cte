@@ -10,5 +10,6 @@ export default {
     headerTextColor: "#FFF",
     headerTextColorActive: "#FFF500",
     iconColor: "#FFF",
-    font: 'Lato'
+    font: 'Lato',
+    button: '#069'
 }

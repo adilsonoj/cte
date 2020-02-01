@@ -1,21 +1,13 @@
-import { StyleSheet, Dimensions } from 'react-native'
-import theme from '../../themes/white'
+import { StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
     container:{
-        //backgroundColor: theme.background,
-        paddingTop: 15,
-        alignItems: 'center',
-        
+        paddingHorizontal: 16,
+        paddingTop: 16,
     },
-    header:{
-        justifyContent:'center',
-        marginTop: 10,
-        marginBottom:10,
-        paddingLeft:6,
-        height: 30,
-        width: Dimensions.get('window').width-30,
-        backgroundColor: '#EEEEEE',
+   
+    button:{
+       paddingVertical: 16
     },
   
 });

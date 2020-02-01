@@ -9,6 +9,9 @@ const styles = StyleSheet.create({
       flexDirection: "row",
       justifyContent: "flex-start",
       alignItems: "center",
+      height: 60,
+      borderBottomWidth: 1,
+      borderBottomColor: '#ccc'
      
     },
     input:{
@@ -31,7 +34,7 @@ const styles = StyleSheet.create({
     label:{
       fontSize: 16,
       fontWeight:"bold",
-      paddingBottom: 12,
+      
       paddingTop:12
     },
     data:{
