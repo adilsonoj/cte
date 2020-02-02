@@ -4,6 +4,7 @@ import { View, Text, SafeAreaView, ScrollView, Button, TouchableWithoutFeedback 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-community/async-storage';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import styles from './styles';
 import Input from '../../components/input';
 import ImagemPerfil from '../../components/imagemPerfil';
@@ -19,6 +20,8 @@ const perfil = () => {
     const [distancia, setDistancia] = useState('');
     const [data, setData] = useState(new Date());
     const [show, setShow] = useState(false);
+    const [observacao, setObservacao] = useState('');
+    const [initializing, setInitializing] = useState(true);
 
     const onLoad = async ()=>{
         let user = await AsyncStorage.getItem('user');
@@ -29,26 +32,43 @@ const perfil = () => {
         console.log(user)
         setNome(user.displayName);
         setEmail(user.email);
-        setTelefone(user.telefone);
-        const uid = firebase.auth().currentUser.uid
-        console.log(uid)
+        setPeso(user.peso);
+        setIdade(user.idade);
+        setDistancia(user.distancia);
+        setObservacao(user.observacao);
+        setData(user.data || data);
     }
 
     useEffect(()=>{
         onLoad();
     },[]);
 
+  
+
     const changeData = (event, date)=>{
         date = date || data;
         setShow(false);
         setData(date);
-      }
+    }
     const onUpdate = async () => {
         await auth().currentUser.updateProfile({
             photoURL: '',
         });
-        const user = auth().currentUser
-        console.log(user)
+        //const user = auth().currentUser;
+        const uid = auth().currentUser.uid;
+// const uid = 'qsdfvfgfd'
+        const user = await firestore().doc(`users/${uid}`).get();
+        
+        
+        
+        // await user.set({
+        //     idade,
+        //     peso,
+        //     objetivos: [distancia, observacao, data]
+        //   },{merge: true});
+ 
+  
+        console.log(user._data)
     }
     
     return (
@@ -66,6 +86,7 @@ const perfil = () => {
                     </View>
                     
                     <Input placeholder="Distância (km)" onChangeText={distancia => setDistancia(distancia)} value={distancia}  keyboardType="numeric"/>
+                    <Input placeholder="Observação" onChangeText={observacao => setObservacao(observacao)} value={observacao} multiline = {true} numberOfLines = {3}/>
                     <TouchableWithoutFeedback onPress={()=>setShow(true)}>
                         <View style={styles.card}> 
                             <Text style={styles.text}>{moment(data).format('D [de] MMMM [de] YYYY')}</Text>
@@ -74,14 +95,14 @@ const perfil = () => {
                     {/* <Input placeholder="Senha" secureTextEntry={true} autoCorrect={false}/> */}
                     
                 
-                <View style={styles.button}>
-                    <Button title="Salvar" color={theme.button} onPress={onUpdate}/>
-                </View>
                 { show && <DateTimePicker value={data}
                       is24Hour={true}
                       display="default"
                       onChange={changeData} />
             }
+                <View style={styles.button}>
+                    <Button title="Salvar" color={theme.button} onPress={onUpdate}/>
+                </View>
             </ScrollView>
         </SafeAreaView>
     )};
