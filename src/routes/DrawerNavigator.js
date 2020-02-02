@@ -15,8 +15,6 @@ import Logout from '../routes/Logout';
 import LoginOrHome from '../pages/LoginOrHome';
 import FeedBack from '../pages/feedBack';
 
-import AsyncStorage from '@react-native-community/async-storage';
-
 import theme from '../themes/white';
 
 const DrawerNavigator = createDrawerNavigator({

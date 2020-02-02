@@ -5,7 +5,6 @@ import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-community/async-storage';
 import { validateEmail } from '../../common/validate'
 import Loader from '../../components/Loader';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import Input from '../../components/input';
 import styles from './styles'
 import Theme from '../../themes/white';
@@ -24,7 +23,9 @@ const Login = (props) => {
             }
             setLoading(true)
             const { user } = await auth().signInWithEmailAndPassword(email, senha);
-           // console.log(user)
+           console.log(user)
+
+           const userDoc = await firestore().doc(`users/${uid}`).get();
             await AsyncStorage.setItem('user', JSON.stringify(user));
 
             props.navigation.navigate("Home")

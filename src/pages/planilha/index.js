@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, SafeAreaView, ScrollView, TouchableWithoutFeedback } from 'react-native';
-import { SwitchActions } from 'react-navigation';
 import { NavigationActions } from 'react-navigation';
 import styles from './styles';
 
