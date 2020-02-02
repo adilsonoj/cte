@@ -47,6 +47,8 @@ const Input= (props) => {
             keyboardType={ props.keyboardType }
             secureTextEntry = {props.secureTextEntry}
             autoFocus = {props.autoFocus}
+            multiline = {props.multiline} 
+            numberOfLines = {props.numberOfLines}
         />
     </View>
   );
