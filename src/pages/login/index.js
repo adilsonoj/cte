@@ -1,18 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, SafeAreaView, Image, TouchableOpacity, Alert, StatusBar, Button, View } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
 import { validateEmail } from '../../common/validate'
 import Loader from '../../components/Loader';
 import Input from '../../components/input';
 import styles from './styles'
 import Theme from '../../themes/white';
+import { connect } from 'react-redux';
+import * as LoginAction from '../../actions/loginAction';
+import { bindActionCreators } from 'redux';
 
 const Login = (props) => {
+    const { updateUserLogged, navigation  } = props; 
+
     const [email, setEmail] = useState('adilsonoj@yahoo.com.br');
     const [senha, setSenha] = useState('123456');
     const [loading, setLoading] = useState(false);
+    
+    useEffect(()=>{
+        console.log(props.user)
+    },[])
+
     const login = async() =>{
         try {
             if(!email && !senha) return
@@ -22,13 +33,14 @@ const Login = (props) => {
                 return
             }
             setLoading(true)
-            const { user } = await auth().signInWithEmailAndPassword(email, senha);
-           console.log(user)
-
-           const userDoc = await firestore().doc(`users/${uid}`).get();
+            let { user } = await auth().signInWithEmailAndPassword(email, senha);
+            const { uid, displayName, photoURL, emailVerified } = user;
+            const userDoc = await firestore().doc(`users/${uid}`).get();
+            user = { uid, displayName, photoURL, email, emailVerified, ...userDoc._data }
             await AsyncStorage.setItem('user', JSON.stringify(user));
 
-            props.navigation.navigate("Home")
+            updateUserLogged(user)
+            navigation.navigate("Home")
             
         } catch (error) {
             console.log(error);
@@ -71,5 +83,10 @@ const Login = (props) => {
     )
    
 }
+const mapStateToProps = state => ({
+  user: state.userLogged.user
+});
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(LoginAction, dispatch);
 
-export default Login;
+export default connect(mapStateToProps,mapDispatchToProps)(Login);

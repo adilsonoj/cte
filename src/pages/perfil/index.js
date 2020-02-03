@@ -13,6 +13,8 @@ import moment from 'moment';
 require('moment/locale/pt-br');
 
 const perfil = () => {
+    const [ user, setUser ] = useState({});
+    const [ objetivo, setObjetivo ] = useState({});
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [idade, setIdade] = useState('');
@@ -25,18 +27,16 @@ const perfil = () => {
 
     const onLoad = async ()=>{
         let user = await AsyncStorage.getItem('user');
-
+        console.log(user)
         if(!user) return
 
-        user = JSON.parse(user).providerData[0];
-        console.log(user)
-        setNome(user.displayName);
-        setEmail(user.email);
-        setPeso(user.peso);
-        setIdade(user.idade);
-        setDistancia(user.distancia);
-        setObservacao(user.observacao);
-        setData(user.data || data);
+        user = JSON.parse(user);
+
+        const { objetivos } = user;
+        objetivos.push(objetivo)
+        console.log(objetivos)
+        setUser({...user})
+       
     }
 
     useEffect(()=>{
@@ -48,7 +48,7 @@ const perfil = () => {
     const changeData = (event, date)=>{
         date = date || data;
         setShow(false);
-        setData(date);
+        setObjetivo({ date });
     }
     const onUpdate = async () => {
         await auth().currentUser.updateProfile({
@@ -57,18 +57,14 @@ const perfil = () => {
         //const user = auth().currentUser;
         const uid = auth().currentUser.uid;
 // const uid = 'qsdfvfgfd'
-        const user = await firestore().doc(`users/${uid}`).get();
+        const userDoc = await firestore().doc(`users/${uid}`);
         
         
         
-        // await user.set({
-        //     idade,
-        //     peso,
-        //     objetivos: [distancia, observacao, data]
-        //   },{merge: true});
+        await userDoc.set(user ,{merge: true});
  
   
-        console.log(user._data)
+        //console.log(user._data)
     }
     
     return (
@@ -77,16 +73,16 @@ const perfil = () => {
                     <View style={styles.imgPerfil}>
                         <ImagemPerfil />
                     </View>
-                    <Input placeholder="Nome" onChangeText={nome => setNome(nome)} value={nome}/>
-                    <Input placeholder="Email" onChangeText={email => setEmail(email)} value={email} keyboardType="email-address"/>
-                    <Input placeholder="Idade" onChangeText={idade => setIdade(idade)} value={idade} keyboardType="numeric"/>
-                    <Input placeholder="Peso (kg)" onChangeText={peso => setPeso(peso)} value={peso}  keyboardType="numeric"/>
+                    <Input placeholder="Nome" onChangeText={displayName => setUser({ displayName })} value={user.displayName}/>
+                    <Input placeholder="Email" onChangeText={email => setUser({email})} value={user.email} keyboardType="email-address"/>
+                    <Input placeholder="Idade" onChangeText={idade => setUser({idade})} value={user.idade} keyboardType="numeric"/>
+                    <Input placeholder="Peso (kg)" onChangeText={peso => setUser({peso})} value={user.peso}  keyboardType="numeric"/>
                     <View style={styles.header}>
                         <Text >OBJETIVO</Text>
                     </View>
                     
-                    <Input placeholder="Distância (km)" onChangeText={distancia => setDistancia(distancia)} value={distancia}  keyboardType="numeric"/>
-                    <Input placeholder="Observação" onChangeText={observacao => setObservacao(observacao)} value={observacao} multiline = {true} numberOfLines = {3}/>
+                    <Input placeholder="Distância (km)" onChangeText={distancia => setObjetivo({ distancia })} value={user.distancia}  keyboardType="numeric"/>
+                    <Input placeholder="Observação" onChangeText={observacao => setObjetivo({ observacao })} value={user.observacao} multiline = {true} numberOfLines = {3}/>
                     <TouchableWithoutFeedback onPress={()=>setShow(true)}>
                         <View style={styles.card}> 
                             <Text style={styles.text}>{moment(data).format('D [de] MMMM [de] YYYY')}</Text>
