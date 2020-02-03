@@ -35,12 +35,15 @@ const Login = (props) => {
             setLoading(true)
             let { user } = await auth().signInWithEmailAndPassword(email, senha);
             const { uid, displayName, photoURL, emailVerified } = user;
+
             const userDoc = await firestore().doc(`users/${uid}`).get();
-            user = { uid, displayName, photoURL, email, emailVerified, ...userDoc._data }
+
+            user = { uid, displayName, photoURL, email, emailVerified, ...userDoc._data };
+
             await AsyncStorage.setItem('user', JSON.stringify(user));
 
-            updateUserLogged(user)
-            navigation.navigate("Home")
+            updateUserLogged(user);
+            navigation.navigate("Home");
             
         } catch (error) {
             console.log(error);
