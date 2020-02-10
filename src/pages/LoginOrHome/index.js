@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
-
-import AsyncStorage from '@react-native-community/async-storage';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as LoginAction from '../../actions/loginAction';
 import Loader from '../../components/Loader';
 
-
 const LoginOrHome = (props)=>{
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true);
 
     useEffect( ()=>{
       getUser();
@@ -16,18 +13,18 @@ const LoginOrHome = (props)=>{
 
     const getUser = async ()=>{
       try {
-            const user = await AsyncStorage.getItem('user');
-           if(user){
+            console.log(props.user)
+           if(Object.entries(props.user).length !== 0){
               props.navigation.navigate("Home");
 
            }else{
 
-              props.navigation.navigate("Login")
+              props.navigation.navigate("Login");
            }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
     
