@@ -6,15 +6,15 @@ import { createStackNavigator, } from 'react-navigation-stack';
 
 import Sobre from '../pages/about';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import TabNavigator from '../routes/TabNavigator';
+import TabNavigator from './TabNavigator';
 import DrawerScreen from '../components/DrawerSceen';
 import Login from '../pages/login';
 import Perfil from '../pages/perfil';
 import Registro from '../pages/Registro';
-import Logout from '../routes/Logout';
+import Logout from './Logout';
 import LoginOrHome from '../pages/LoginOrHome';
 import FeedBack from '../pages/feedBack';
-
+import Vo2 from '../pages/professor/vo2';
 import theme from '../themes/white';
 
 const DrawerNavigator = createDrawerNavigator({
@@ -60,6 +60,7 @@ const DrawerStack = createStackNavigator({
 
 //responsável pela integracao do DrawerNavigator e MaterialTopTabNavigator
 const AppStackNavigator = createStackNavigator({
+  Vo2: Vo2,
   LoginOrHome: { 
     screen: LoginOrHome,
     navigationOptions: ()=>({
