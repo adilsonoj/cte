@@ -1,64 +1,83 @@
-import React, { useState } from 'react';
-
-import { View, SafeAreaView, ScrollView, Alert, Button } from 'react-native';
-import { validateEmail } from '../../common/validate'
+import React, {useState, useEffect} from 'react';
+import {View, SafeAreaView, ScrollView, Button, Text} from 'react-native';
+import {validateEmail} from '../../common/validate';
+import {error} from '../../common/error_pt';
 import auth from '@react-native-firebase/auth';
 import styles from './styles';
 import Input from '../../components/input';
 import Loader from '../../components/Loader';
-import Theme from '../../themes/white'
+import Theme from '../../themes/white';
 
+const Registro = props => {
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [confirmeSenha, setConfirmeSenha] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [erro, setErro] = useState(null);
 
-const Registro = (props) => {
-    const [nome, setNome] = useState('');
-    const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
-    const [confirmeSenha, setConfirmeSenha] = useState('');
-    const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    setErro(null);
+  }, [nome, email, senha, confirmeSenha]);
 
-    const registrar = async () => {
-        if (!(nome && email && senha && confirmeSenha)) return
+  const registrar = async () => {
+    if (!(nome && email && senha && confirmeSenha)) return;
 
-        if(email && !validateEmail(email)) {
-            Alert.alert('Erro','Email inválido');
-            return
-        }
-       if(senha != confirmeSenha){
-           Alert.alert('','Por favor confirme a senha digitada!');
-           return
-       }
-       //verificar senha com 6 caracteres
-      
-       try {
-            setLoading(true)
-           await auth().createUserWithEmailAndPassword(email, senha);
-          
-           await auth().currentUser.updateProfile({
-               displayName: nome,
-           });
-
-           props.navigation.navigate("Home")
-       } catch (error) {
-           Alert.alert('',String(error).split(":")[1].trim());
-           console.log(error);
-       } finally {
-            setLoading(false)
-       }
+    if (email && !validateEmail(email)) {
+      setErro('Email inválido');
+      return;
+    }
+    if (senha != confirmeSenha) {
+      setErro('Por favor confirme a senha digitada!');
+      return;
     }
 
-    return(
+    try {
+      setLoading(true);
+      await auth().createUserWithEmailAndPassword(email, senha);
+
+      await auth().currentUser.updateProfile({
+        displayName: nome,
+      });
+
+      props.navigation.navigate('Login');
+    } catch (e) {
+      setErro(error(e));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
     <SafeAreaView style={styles.container}>
-        <ScrollView >
-            <Loader loading={loading}/>
-            <Input placeholder="Nome" onChangeText={nome => setNome(nome)}/>
-            <Input placeholder="Email" onChangeText={email => setEmail(email)} keyboardType="email-address"/>
-            <Input placeholder="Senha" secureTextEntry={true} autoCorrect={false} onChangeText={senha => setSenha(senha)} />
-            <Input placeholder="Confirme a Senha" secureTextEntry={true} autoCorrect={false} onChangeText={confirmeSenha => setConfirmeSenha(confirmeSenha)}/>
-            <View style={styles.button}>
-                <Button title="Entrar" color={Theme.button}  onPress={registrar}/>
-            </View>
-        </ScrollView>
+      <ScrollView>
+        <Loader loading={loading} />
+        <Input placeholder="Nome" onChangeText={nome => setNome(nome)} />
+        <Input
+          placeholder="Email"
+          onChangeText={email => setEmail(email)}
+          keyboardType="email-address"
+        />
+        <Input
+          placeholder="Senha"
+          secureTextEntry={true}
+          autoCorrect={false}
+          onChangeText={senha => setSenha(senha)}
+        />
+        <Input
+          placeholder="Confirme a Senha"
+          secureTextEntry={true}
+          autoCorrect={false}
+          onChangeText={confirmeSenha => setConfirmeSenha(confirmeSenha)}
+        />
+        {erro && <Text style={{fontSize: 13, color: 'red'}}>{erro}</Text>}
+
+        <View style={styles.button}>
+          <Button title="Entrar" color={Theme.button} onPress={registrar} />
+        </View>
+      </ScrollView>
     </SafeAreaView>
-)};
+  );
+};
 
 export default Registro;
