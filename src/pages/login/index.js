@@ -12,11 +12,11 @@ import {
 import {NavigationActions} from 'react-navigation';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import AsyncStorage from '@react-native-community/async-storage';
 import {validateEmail} from '../../common/validate';
 import {error} from '../../common/error_pt';
 import Loader from '../../components/Loader';
 import Input from '../../components/input';
+import {TextInput} from 'react-native-paper';
 import styles from './styles';
 import Theme from '../../themes/white';
 import {connect} from 'react-redux';
@@ -60,8 +60,6 @@ const Login = props => {
         ...userDoc._data,
       };
 
-      await AsyncStorage.setItem('user', JSON.stringify(user));
-
       updateUserLogged(user);
       navigation.navigate('Home');
     } catch (e) {
@@ -88,17 +86,19 @@ const Login = props => {
           style={styles.img}
         />
       </View>
-      <Input
-        placeholder="Email"
-        keyboardType="email-address"
+      <TextInput
+        label="Email"
         value={email}
-        onChangeText={email => setEmail(email)}
+        mode="outlined"
         autoFocus={true}
+        keyboardType="email-address"
+        onChangeText={email => setEmail(email)}
       />
-      <Input
-        placeholder="Senha"
-        secureTextEntry={true}
+      <TextInput
+        label="Senha"
         value={senha}
+        mode="outlined"
+        secureTextEntry={true}
         onChangeText={senha => setSenha(senha)}
       />
 
