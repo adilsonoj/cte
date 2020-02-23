@@ -29,12 +29,23 @@ const styles = StyleSheet.create({
   },
   imgPerfil: {
     alignItems: 'center',
+    paddingBottom: 15,
   },
   text: {
     fontSize: 16,
   },
   placeholder: {
     color: '#aaa',
+  },
+  avatar: {
+    height: 80,
+    width: 80,
+    borderRadius: 40,
+    backgroundColor: '#f5f5f5',
+  },
+  textAvatar: {
+    fontSize: 12,
+    alignSelf: 'center',
   },
 });
 

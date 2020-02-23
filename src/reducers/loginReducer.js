@@ -8,6 +8,11 @@ export const userLogged = (state = initialState, action) => {
         ...state,
         user: action.user,
       };
+    case 'UPDATE_USER_PHOTO_URL':
+      return {
+        ...state,
+        photoURL: action.url,
+      };
     case 'USER_LOGGED_OUT':
       return {
         state: undefined,
