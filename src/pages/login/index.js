@@ -15,7 +15,6 @@ import firestore from '@react-native-firebase/firestore';
 import {validateEmail} from '../../common/validate';
 import {error} from '../../common/error_pt';
 import Loader from '../../components/Loader';
-import Input from '../../components/input';
 import {TextInput} from 'react-native-paper';
 import styles from './styles';
 import Theme from '../../themes/white';

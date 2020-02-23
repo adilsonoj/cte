@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {View, SafeAreaView, ScrollView, Button, Text} from 'react-native';
+import {View, SafeAreaView, ScrollView, Text} from 'react-native';
 import {validateEmail} from '../../common/validate';
 import {error} from '../../common/error_pt';
 import auth from '@react-native-firebase/auth';
 import styles from './styles';
-import Input from '../../components/input';
+import {TextInput, Button} from 'react-native-paper';
 import Loader from '../../components/Loader';
 import Theme from '../../themes/white';
 
@@ -52,20 +52,27 @@ const Registro = props => {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <Loader loading={loading} />
-        <Input placeholder="Nome" onChangeText={nome => setNome(nome)} />
-        <Input
-          placeholder="Email"
+        <TextInput
+          label="Nome"
+          mode="outlined"
+          onChangeText={nome => setNome(nome)}
+        />
+        <TextInput
+          label="Email"
+          mode="outlined"
           onChangeText={email => setEmail(email)}
           keyboardType="email-address"
         />
-        <Input
-          placeholder="Senha"
+        <TextInput
+          label="Senha"
+          mode="outlined"
           secureTextEntry={true}
           autoCorrect={false}
           onChangeText={senha => setSenha(senha)}
         />
-        <Input
-          placeholder="Confirme a Senha"
+        <TextInput
+          label="Confirme a Senha"
+          mode="outlined"
           secureTextEntry={true}
           autoCorrect={false}
           onChangeText={confirmeSenha => setConfirmeSenha(confirmeSenha)}
@@ -73,7 +80,9 @@ const Registro = props => {
         {erro && <Text style={{fontSize: 13, color: 'red'}}>{erro}</Text>}
 
         <View style={styles.button}>
-          <Button title="Entrar" color={Theme.button} onPress={registrar} />
+          <Button mode="contained" color={Theme.button} onPress={registrar}>
+            ENTRAR
+          </Button>
         </View>
       </ScrollView>
     </SafeAreaView>
