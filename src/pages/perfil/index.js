@@ -83,7 +83,7 @@ const perfil = ({userStore, updateUserLogged, navigation}) => {
       objetivos.push({
         distancia: user.distancia,
         observacao: user.observacao,
-        data: user.data,
+        data,
       });
     }
 
