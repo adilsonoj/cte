@@ -17,7 +17,7 @@ import storage from '@react-native-firebase/storage';
 import {connect} from 'react-redux';
 import * as LoginAction from '../../actions/loginAction';
 import {bindActionCreators} from 'redux';
-import {TextInput, Avatar, Button} from 'react-native-paper';
+import {TextInput, Button} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImagePicker from 'react-native-image-picker';
 import styles from './styles';
@@ -90,12 +90,12 @@ const perfil = ({userStore, updateUserLogged, updateUserPhotoURL}) => {
     });
   };
   const updateAvatar = async uri => {
-    const ref = storage().ref(`perfil/${uid}.jpg`);
+    const ref = storage().ref(`perfil/${uid}.png`);
     let url = '';
     try {
       await ref.putFile(uri, {
         cacheControl: 'no-store', // disable caching
-        contentType: 'image/jpg',
+        contentType: 'image/png',
       });
       url = await ref.getDownloadURL();
       const source = {uri: url};
@@ -107,6 +107,7 @@ const perfil = ({userStore, updateUserLogged, updateUserPhotoURL}) => {
       });
       console.log(url);
       updateUserPhotoURL(url);
+      setUser({...user, photoURL: url});
     } catch (error) {
       console.log(error);
     }
@@ -138,6 +139,9 @@ const perfil = ({userStore, updateUserLogged, updateUserPhotoURL}) => {
     let dados = {
       idade: user.idade,
       peso: user.peso,
+      displayName: user.displayName,
+      email: user.email,
+      photoURL: user.photoURL,
       objetivos,
     };
 
