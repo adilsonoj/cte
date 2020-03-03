@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {View, SafeAreaView, Text} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {View, SafeAreaView, Text, TouchableOpacity} from 'react-native';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 import CalendarStrip from 'react-native-calendar-strip';
@@ -11,13 +11,39 @@ import theme from '../../../themes/white';
 
 import styles from './styles';
 const vo2 = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const desenvolvimentoInicial = {
+    distancia: 0,
+    un: 'km',
+    ritimo: '--km/h',
+  };
+
+  const inicial = {
+    distancia: 0,
+    un: 'km',
+    ritimo: 'lento',
+  };
+  const [dataSelecionada, setDataSelecionada] = useState(new Date());
   const [currentDateIndex, setCurrentDateIndex] = useState(null);
-  const [aquecimento, setAquecimento] = useState('');
+  const [aquecimento, setAquecimento] = useState(inicial);
+  const [indexAquecimento, setIndexAquencimento] = useState([0, 0, 0]);
+  const [desenvolvimento, setDesenvolvimento] = useState(
+    desenvolvimentoInicial,
+  );
+  const [indexDesenvolvimento, setIndexDesenvolvimento] = useState([0, 0]);
+  const [calma, setCalma] = useState(inicial);
+  const [indexCalma, setIndexCalma] = useState([0, 0, 0]);
+  const [vo2, setVo2] = useState(50);
+  const [indexVo2, setIndexVo2] = useState([0]);
+  const [cargaPace, setCargaPace] = useState(50);
+  const [indexCargaPace, setIndexCargaPace] = useState([0]);
+  const [percurso, setPercurso] = useState('Distância');
+  const [indexPercurso, setIndexPercurso] = useState([0]);
   let markedDates = [];
   let customDatesStyles = [];
-  const un = ['km', 'm'];
-  const ritimo = ['rápido', 'médio', 'lento'];
+  const [un, setUn] = useState(['km', 'm']);
+  const ritimo = ['lento', 'moderado', 'rápido'];
+  const porcento = [50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100];
+  const percursos = ['Distância', 'Tempo'];
 
   const getList = (total, label = '') => {
     return Array.apply(null, Array(total)).map(function(_, i) {
@@ -26,6 +52,25 @@ const vo2 = () => {
   };
 
   const distancia = getList(60);
+
+  const changeUn = () => {
+    if (percurso === 'Tempo') {
+      setUn(['min', 'h']);
+      setAquecimento({...inicial, un: 'min'});
+      setCalma({...inicial, un: 'min'});
+      setDesenvolvimento({...desenvolvimentoInicial, un: 'min'});
+      return;
+    }
+
+    setUn(['km', 'm']);
+    setAquecimento(inicial);
+    setCalma(inicial);
+    setDesenvolvimento(desenvolvimentoInicial);
+  };
+
+  useEffect(() => {
+    changeUn();
+  }, [percurso]);
 
   let _date = moment();
   customDatesStyles.push({
@@ -52,23 +97,126 @@ const vo2 = () => {
   });
 
   const dialogAquecimento = async () => {
-    console.log('aquecimento');
     const inputs = [distancia, un, ritimo];
-    const selectedValues = aquecimento
-      ? [aquecimento.distancia, aquecimento.un, aquecimento.ritimo]
-      : [0, 0, 0];
+    const selectedValues = indexAquecimento;
     const options = {
       dialogTitle: 'Aquecimento',
     };
-    const result = await openDialog(inputs, selectedValues, options);
-    if (result)
-      setAquecimento({distancia: result[0], un: result[1], ritimo: result[2]});
+    try {
+      const result = await openDialog(inputs, selectedValues, options);
+      if (result) {
+        setAquecimento({
+          distancia: result[0],
+          un: un[result[1]],
+          ritimo: ritimo[result[2]],
+        });
+        setIndexAquencimento([result[0], result[1], result[2]]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const dialogDesenvolvimento = async () => {
+    const inputs = [distancia, un];
+    const selectedValues = indexDesenvolvimento;
+    const options = {
+      dialogTitle: 'Desenvolvimento',
+    };
+    try {
+      const result = await openDialog(inputs, selectedValues, options);
+      if (result) {
+        setDesenvolvimento({
+          distancia: result[0],
+          un: un[result[1]],
+          ritimo: '6,30',
+        });
+        setIndexDesenvolvimento([result[0], result[1]]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const dialogCalma = async () => {
+    const inputs = [distancia, un, ritimo];
+    const selectedValues = indexCalma;
+    const options = {
+      dialogTitle: 'Volta a calma',
+    };
+    try {
+      const result = await openDialog(inputs, selectedValues, options);
+      if (result) {
+        setCalma({
+          distancia: result[0],
+          un: un[result[1]],
+          ritimo: ritimo[result[2]],
+        });
+        setIndexCalma([result[0], result[1], result[2]]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const dialogVo2 = async () => {
+    const inputs = [porcento];
+    const selectedValues = indexVo2;
+    const options = {
+      dialogTitle: 'Vo2',
+    };
+    try {
+      const result = await openDialog(inputs, selectedValues, options);
+      if (result) {
+        setVo2(porcento[result[0]]);
+        setIndexVo2([result[0]]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const dialogCargaPace = async () => {
+    const inputs = [porcento];
+    const selectedValues = indexCargaPace;
+    const options = {
+      dialogTitle: 'Carga Pace',
+    };
+    try {
+      const result = await openDialog(inputs, selectedValues, options);
+      if (result) {
+        setCargaPace(porcento[result[0]]);
+        setIndexCargaPace([result[0]]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const dialogPercurso = async () => {
+    const inputs = [percursos];
+    const selectedValues = indexPercurso;
+    const options = {
+      dialogTitle: 'Percurso',
+    };
+    try {
+      const result = await openDialog(inputs, selectedValues, options);
+      if (result) {
+        setPercurso(percursos[result[0]]);
+        setIndexPercurso([result[0]]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const toggleMenu = () => {
     console.log('menu');
   };
 
+  const onDateSelected = date => {
+    setDataSelecionada(date);
+  };
   return (
     <SafeAreaView style={styles.container}>
       <CalendarStrip
@@ -82,38 +230,52 @@ const vo2 = () => {
         }}
         customDatesStyles={customDatesStyles}
         markedDates={markedDates}
+        onDateSelected={onDateSelected}
       />
       <CardAluno onPress={toggleMenu} />
 
       <View style={styles.variacoes}>
-        <View style={styles.item}>
-          <Text style={styles.titulo}>Vo2</Text>
-          <Text>70%</Text>
-        </View>
-        <View style={[styles.item, styles.border]}>
-          <Text style={styles.titulo}>Carga Pace</Text>
-          <Text>70%</Text>
-        </View>
-        <View style={styles.item}>
-          <Text style={styles.titulo}>Percurso</Text>
-          <Text>Distância</Text>
-        </View>
+        <TouchableOpacity onPress={dialogVo2}>
+          <View style={styles.item}>
+            <Text style={styles.titulo}>Vo2</Text>
+            <Text>{`${vo2}%`}</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={dialogCargaPace}>
+          <View style={[styles.item, styles.border]}>
+            <Text style={styles.titulo}>Carga Pace</Text>
+            <Text>{`${cargaPace}%`}</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={dialogPercurso}>
+          <View style={styles.item}>
+            <Text style={styles.titulo}>Percurso</Text>
+            <Text>{`${percurso}`}</Text>
+          </View>
+        </TouchableOpacity>
       </View>
       <InputPlanilha
         titulo="Aquecimento"
-        valor={aquecimento.distancia}
-        ritimo="trote"
+        valor={aquecimento && `${aquecimento.distancia}${aquecimento.un}`}
+        ritimo={aquecimento.ritimo}
         changeValue={dialogAquecimento}
       />
 
-      <InputPlanilha titulo="Desenvolvimento" valor="2Km" ritimo="6,32 km/h" />
+      <InputPlanilha
+        titulo="Desenvolvimento"
+        valor={`${desenvolvimento.distancia}${desenvolvimento.un}`}
+        ritimo={desenvolvimento.ritimo}
+        changeValue={dialogDesenvolvimento}
+      />
 
-      <InputPlanilha titulo="Volta a calma" valor="500m" ritimo="trote" />
+      <InputPlanilha
+        titulo="Volta a calma"
+        valor={`${calma.distancia}${calma.un}`}
+        ritimo={calma.ritimo}
+        changeValue={dialogCalma}
+      />
       <View style={{paddingVertical: 16}}>
-        <Button
-          mode="contained"
-          onPress={() => console.log('Pressed')}
-          color={theme.button}>
+        <Button mode="contained" color={theme.button}>
           Adicionar Treino
         </Button>
       </View>
