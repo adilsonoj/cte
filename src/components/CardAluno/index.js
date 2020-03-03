@@ -1,48 +1,61 @@
-import React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import React, {useRef} from 'react';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
 // import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
+import moment from 'moment';
+require('moment/locale/pt-br');
 import styles from './styles';
 
-// import { Container } from './styles';
-
-const CardAluno = props => {
-  let menu = null;
-
-  const setMenuRef = ref => {
-    menu = ref;
-  };
+const CardAluno = ({
+  aluno,
+  avaliar,
+  trocar,
+  editar,
+  onPressPlanilha,
+  toggleMenu,
+}) => {
+  const menu = useRef(null);
 
   const hideMenu = () => {
     console.log('hide');
-    menu.hide();
+    menu.current.hide();
   };
 
   const showMenu = () => {
     console.log('show');
-    menu.show();
+    menu.current.show();
   };
 
+  toggleMenu(menu);
   return (
     <View style={styles.container}>
       <View style={styles.cardAluno}>
-        <View style={styles.avatar}></View>
+        <Image source={{uri: aluno.photoURL}} style={styles.avatar}></Image>
         <View style={styles.info}>
           <View>
-            <Text style={styles.textNome}>Fulano de Tal</Text>
+            <Text style={styles.textNome}>{aluno.displayName}</Text>
           </View>
           <View style={styles.linha2}>
-            <Text style={styles.textObjetivo}>21K em 21/ABR</Text>
-            <Text>Vo2: 38,8</Text>
+            <Text style={styles.textObjetivo}>
+              {`${aluno.objetivos[0].distancia}km em ${moment(
+                aluno.objetivos[0].data._seconds * 1000,
+              ).format('D/MM/YYYY')}`}
+            </Text>
+            <Text>Vo2: {aluno.vo2}</Text>
           </View>
         </View>
         <TouchableOpacity onPress={showMenu}>
           <View style={styles.menu}>
-            <Menu ref={setMenuRef}>
-              <MenuItem onPress={hideMenu}>Trocar Aluno</MenuItem>
-              <MenuDivider />
-              <MenuItem onPress={hideMenu}>Avaliar</MenuItem>
+            <Menu ref={menu}>
+              {trocar && <MenuItem onPress={hideMenu}>Trocar Aluno</MenuItem>}
+              {editar && (
+                <MenuItem onPress={menu => onPressPlanilha(menu)}>
+                  Editar Planilha
+                </MenuItem>
+              )}
+
+              {avaliar && <MenuItem onPress={hideMenu}>Avaliar</MenuItem>}
             </Menu>
             <Icon name="dots-vertical" size={20} />
           </View>
