@@ -24,6 +24,8 @@ const vo2 = ({navigation}) => {
     un: 'km',
     ritimo: 'lento',
   };
+  let _date = moment();
+
   const [dataSelecionada, setDataSelecionada] = useState(new Date());
   const [currentDateIndex, setCurrentDateIndex] = useState(null);
   const [aquecimento, setAquecimento] = useState(inicial);
@@ -41,7 +43,9 @@ const vo2 = ({navigation}) => {
   const [percurso, setPercurso] = useState('Distância');
   const [indexPercurso, setIndexPercurso] = useState([0]);
   const [aluno, setAluno] = useState(navigation.getParam('item'));
-  let markedDates = [];
+  const [markedDates, setMarkedDates] = useState([]);
+  const [weekStart, setWeekStart] = useState(_date);
+  // let markedDates = [];
   let customDatesStyles = [];
   const [un, setUn] = useState(['km', 'm']);
   const ritimo = ['lento', 'moderado', 'rápido'];
@@ -75,15 +79,6 @@ const vo2 = ({navigation}) => {
     setDesenvolvimento(desenvolvimentoInicial);
   };
 
-  useEffect(() => {
-    changeUn();
-  }, [percurso]);
-
-  useEffect(() => {
-    calculaPace(porcento[0]);
-  }, []);
-
-  let _date = moment();
   customDatesStyles.push({
     startDate: _date, // Single date since no endDate provided
     //dateNameStyle: {color: 'blue'},
@@ -91,21 +86,41 @@ const vo2 = ({navigation}) => {
     // Random color...
     // dateContainerStyle: { backgroundColor: `#${(`#00000${(Math.random() * (1 << 24) | 0).toString(16)}`).slice(-6)}` },
   });
-  markedDates.push({
-    date: _date,
-    dots: [
-      {
-        key: 1,
-        color: 'red',
-        selectedDotColor: 'yellow',
-      },
-      {
-        key: 2,
-        color: 'blue',
-        selectedDotColor: 'yellow',
-      },
-    ],
-  });
+
+  const onLoad = async () => {
+    const userDoc = await firestore()
+      .doc(`users/${aluno.uid.trim()}`)
+      .get();
+    console.log(userDoc._data);
+
+    const {treinos} = userDoc._data;
+    console.log(treinos);
+    const markeds = [];
+    treinos.forEach((treino, i) => {
+      console.log(moment(treino.data._seconds * 1000));
+      markeds.push({
+        date: moment(treino.data._seconds * 1000),
+        dots: [
+          {
+            key: i,
+            color: 'red',
+            selectedDotColor: 'yellow',
+          },
+        ],
+      });
+    });
+    setMarkedDates(markeds);
+  };
+  useEffect(() => {
+    onLoad();
+  }, []);
+  useEffect(() => {
+    changeUn();
+  }, [percurso]);
+
+  useEffect(() => {
+    calculaPace(porcento[0]);
+  }, []);
 
   const dialogAquecimento = async () => {
     const inputs = [distancia, un, ritimo];
@@ -269,25 +284,25 @@ const vo2 = ({navigation}) => {
         <CalendarStrip
           style={{height: 90, paddingTop: 16}}
           calendarHeaderContainerStyle={{paddingBottom: 0}}
-          calendarAnimation={{type: 'sequence', duration: 30}}
+          calendarAnimation={{type: 'parallel', duration: 15}}
           daySelectionAnimation={{
             type: 'background',
             duration: 300,
             highlightColor: '#fff',
           }}
+          startingDate={weekStart}
+          onWeekChanged={week => setWeekStart(week)}
           customDatesStyles={customDatesStyles}
           markedDates={markedDates}
-          onDateSelected={onDateSelected}
+          onDateSelected={date => setDataSelecionada(date)}
         />
         <CardAluno avaliar trocar item={aluno} />
 
         <View style={styles.variacoes}>
-          <TouchableOpacity onPress={dialogVo2}>
-            <View style={styles.item}>
-              <Text style={styles.titulo}>Vo2 Treino</Text>
-              <Text>{`${vo2Treino}%`}</Text>
-            </View>
-          </TouchableOpacity>
+          <View style={styles.item}>
+            <Text style={styles.titulo}>Vo2 Treino</Text>
+            <Text>{`${vo2Treino}%`}</Text>
+          </View>
           <TouchableOpacity onPress={dialogIntensidade}>
             <View style={[styles.item, styles.border]}>
               <Text style={styles.titulo}>Intensidade</Text>
