@@ -1,7 +1,8 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useLayoutEffect} from 'react';
 import {View, SafeAreaView, Text, TouchableOpacity} from 'react-native';
 import moment from 'moment';
 import 'moment/locale/pt-br';
+import firestore from '@react-native-firebase/firestore';
 import CalendarStrip from 'react-native-calendar-strip';
 import {Button} from 'react-native-paper';
 import {openDialog} from 'rn-android-picker-dialog';
@@ -10,11 +11,12 @@ import InputPlanilha from '../../../components/InputPlanilha';
 import theme from '../../../themes/white';
 
 import styles from './styles';
-const vo2 = () => {
+import {ScrollView} from 'react-native-gesture-handler';
+const vo2 = ({navigation}) => {
   const desenvolvimentoInicial = {
     distancia: 0,
     un: 'km',
-    ritimo: '--km/h',
+    ritimo: '',
   };
 
   const inicial = {
@@ -32,12 +34,13 @@ const vo2 = () => {
   const [indexDesenvolvimento, setIndexDesenvolvimento] = useState([0, 0]);
   const [calma, setCalma] = useState(inicial);
   const [indexCalma, setIndexCalma] = useState([0, 0, 0]);
-  const [vo2, setVo2] = useState(50);
+  const [vo2Treino, setVo2Treino] = useState(50);
   const [indexVo2, setIndexVo2] = useState([0]);
-  const [cargaPace, setCargaPace] = useState(50);
-  const [indexCargaPace, setIndexCargaPace] = useState([0]);
+  const [intensidade, setIntensidade] = useState(50);
+  const [indexIntensidade, setIndexIntensidade] = useState([0]);
   const [percurso, setPercurso] = useState('Distância');
   const [indexPercurso, setIndexPercurso] = useState([0]);
+  const [aluno, setAluno] = useState(navigation.getParam('item'));
   let markedDates = [];
   let customDatesStyles = [];
   const [un, setUn] = useState(['km', 'm']);
@@ -58,7 +61,11 @@ const vo2 = () => {
       setUn(['min', 'h']);
       setAquecimento({...inicial, un: 'min'});
       setCalma({...inicial, un: 'min'});
-      setDesenvolvimento({...desenvolvimentoInicial, un: 'min'});
+      setDesenvolvimento({
+        ...desenvolvimentoInicial,
+        ritimo: desenvolvimento.ritimo,
+        un: 'min',
+      });
       return;
     }
 
@@ -71,6 +78,10 @@ const vo2 = () => {
   useEffect(() => {
     changeUn();
   }, [percurso]);
+
+  useEffect(() => {
+    calculaPace(porcento[0]);
+  }, []);
 
   let _date = moment();
   customDatesStyles.push({
@@ -127,9 +138,9 @@ const vo2 = () => {
       const result = await openDialog(inputs, selectedValues, options);
       if (result) {
         setDesenvolvimento({
+          ...desenvolvimento,
           distancia: result[0],
           un: un[result[1]],
-          ritimo: '6,30',
         });
         setIndexDesenvolvimento([result[0], result[1]]);
       }
@@ -168,7 +179,7 @@ const vo2 = () => {
     try {
       const result = await openDialog(inputs, selectedValues, options);
       if (result) {
-        setVo2(porcento[result[0]]);
+        setVo2Treino(porcento[result[0]]);
         setIndexVo2([result[0]]);
       }
     } catch (error) {
@@ -176,21 +187,43 @@ const vo2 = () => {
     }
   };
 
-  const dialogCargaPace = async () => {
+  const dialogIntensidade = async () => {
     const inputs = [porcento];
-    const selectedValues = indexCargaPace;
+    const selectedValues = indexIntensidade;
     const options = {
-      dialogTitle: 'Carga Pace',
+      dialogTitle: 'Intensidade',
     };
     try {
       const result = await openDialog(inputs, selectedValues, options);
       if (result) {
-        setCargaPace(porcento[result[0]]);
-        setIndexCargaPace([result[0]]);
+        setIntensidade(porcento[result[0]]);
+        setIndexIntensidade([result[0]]);
+        calculaPace(porcento[result[0]]);
       }
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const calculaPace = intensidad => {
+    let vo2Max = aluno.vo2;
+    intensidad = intensidad / 100;
+    let vo2Basal = 3.5;
+    let vo2Treino = intensidad * (vo2Max - vo2Basal) + vo2Basal;
+    let velocTreino = (vo2Treino.toFixed(2) - vo2Basal) / 3.4;
+    let pace = 60 / velocTreino.toFixed(2);
+    let vo2PerCent = (vo2Treino.toFixed(2) * 100) / vo2Max;
+
+    console.log('vo2Max', vo2Max);
+    console.log('intensidad', intensidad);
+    console.log('vo2Basal', vo2Basal);
+    console.log('vo2Treino', vo2Treino);
+    console.log('velocTreino', velocTreino);
+    console.log('pace', pace);
+    console.log('vo2PerCent', Math.round(vo2PerCent));
+
+    setVo2Treino(Math.round(vo2PerCent));
+    setDesenvolvimento({...desenvolvimento, ritimo: pace.toFixed(2)});
   };
 
   const dialogPercurso = async () => {
@@ -210,75 +243,90 @@ const vo2 = () => {
     }
   };
 
-  const toggleMenu = () => {
-    console.log('menu');
-  };
-
   const onDateSelected = date => {
     setDataSelecionada(date);
+    console.log(dataSelecionada);
+  };
+
+  const addTreino = async () => {
+    let treino = {
+      data: dataSelecionada,
+      aquecimento,
+      desenvolvimento,
+      calma,
+      intensidade,
+      vo2Treino,
+    };
+    const userDoc = firestore().doc(`users/${aluno.uid.trim()}`);
+    await userDoc.update({
+      treinos: [treino],
+    });
+    console.log(treino);
   };
   return (
     <SafeAreaView style={styles.container}>
-      <CalendarStrip
-        style={{height: 90, paddingTop: 16}}
-        calendarHeaderContainerStyle={{paddingBottom: 0}}
-        calendarAnimation={{type: 'sequence', duration: 30}}
-        daySelectionAnimation={{
-          type: 'background',
-          duration: 300,
-          highlightColor: '#fff',
-        }}
-        customDatesStyles={customDatesStyles}
-        markedDates={markedDates}
-        onDateSelected={onDateSelected}
-      />
-      <CardAluno onPress={toggleMenu} />
+      <ScrollView>
+        <CalendarStrip
+          style={{height: 90, paddingTop: 16}}
+          calendarHeaderContainerStyle={{paddingBottom: 0}}
+          calendarAnimation={{type: 'sequence', duration: 30}}
+          daySelectionAnimation={{
+            type: 'background',
+            duration: 300,
+            highlightColor: '#fff',
+          }}
+          customDatesStyles={customDatesStyles}
+          markedDates={markedDates}
+          onDateSelected={onDateSelected}
+        />
+        <CardAluno avaliar trocar item={aluno} />
 
-      <View style={styles.variacoes}>
-        <TouchableOpacity onPress={dialogVo2}>
-          <View style={styles.item}>
-            <Text style={styles.titulo}>Vo2</Text>
-            <Text>{`${vo2}%`}</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={dialogCargaPace}>
-          <View style={[styles.item, styles.border]}>
-            <Text style={styles.titulo}>Carga Pace</Text>
-            <Text>{`${cargaPace}%`}</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={dialogPercurso}>
-          <View style={styles.item}>
-            <Text style={styles.titulo}>Percurso</Text>
-            <Text>{`${percurso}`}</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-      <InputPlanilha
-        titulo="Aquecimento"
-        valor={aquecimento && `${aquecimento.distancia}${aquecimento.un}`}
-        ritimo={aquecimento.ritimo}
-        changeValue={dialogAquecimento}
-      />
+        <View style={styles.variacoes}>
+          <TouchableOpacity onPress={dialogVo2}>
+            <View style={styles.item}>
+              <Text style={styles.titulo}>Vo2 Treino</Text>
+              <Text>{`${vo2Treino}%`}</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={dialogIntensidade}>
+            <View style={[styles.item, styles.border]}>
+              <Text style={styles.titulo}>Intensidade</Text>
+              <Text>{`${intensidade}%`}</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={dialogPercurso}>
+            <View style={styles.item}>
+              <Text style={styles.titulo}>Percurso</Text>
+              <Text>{`${percurso}`}</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <InputPlanilha
+          titulo="Aquecimento"
+          valor={aquecimento && `${aquecimento.distancia}${aquecimento.un}`}
+          ritimo={aquecimento.ritimo}
+          changeValue={dialogAquecimento}
+        />
 
-      <InputPlanilha
-        titulo="Desenvolvimento"
-        valor={`${desenvolvimento.distancia}${desenvolvimento.un}`}
-        ritimo={desenvolvimento.ritimo}
-        changeValue={dialogDesenvolvimento}
-      />
+        <InputPlanilha
+          titulo="Desenvolvimento"
+          valor={`${desenvolvimento.distancia}${desenvolvimento.un}`}
+          ritimo={`${desenvolvimento.ritimo} min/km`}
+          changeValue={dialogDesenvolvimento}
+        />
 
-      <InputPlanilha
-        titulo="Volta a calma"
-        valor={`${calma.distancia}${calma.un}`}
-        ritimo={calma.ritimo}
-        changeValue={dialogCalma}
-      />
-      <View style={{paddingVertical: 16}}>
-        <Button mode="contained" color={theme.button}>
-          Adicionar Treino
-        </Button>
-      </View>
+        <InputPlanilha
+          titulo="Volta a calma"
+          valor={`${calma.distancia}${calma.un}`}
+          ritimo={calma.ritimo}
+          changeValue={dialogCalma}
+        />
+        <View style={{paddingVertical: 16}}>
+          <Button mode="contained" color={theme.button} onPress={addTreino}>
+            Adicionar Treino
+          </Button>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
