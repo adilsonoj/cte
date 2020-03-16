@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, SafeAreaView, FlatList} from 'react-native';
+import {StatusBar, SafeAreaView, FlatList} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import moment from 'moment';
 require('moment/locale/pt-br');
 import CardAluno from '../../components/CardAluno';
 import styles from './styles';
+import Theme from '../../themes/white';
 
 const DATA = [
   {
@@ -30,11 +31,9 @@ const DATA = [
 const montarPlanilha = menu => {
   console.log('montar planilha', menu);
 };
-const alunos = () => {
+const alunos = ({navigation}) => {
   const [users, setUsers] = useState([]);
-  const toggleMenu = () => {
-    console.log('menu');
-  };
+
   const onLoad = async () => {
     const list = [];
     const query = await firestore()
@@ -55,17 +54,11 @@ const alunos = () => {
   }, []);
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar backgroundColor={Theme.primaryDark} barStyle="light-content" />
       <FlatList
         data={users}
         renderItem={({item}) => (
-          <CardAluno
-            aluno={item}
-            avaliar
-            editar
-            trocar
-            onPressPlanilha={montarPlanilha}
-            toggleMenu={toggleMenu.bind(this)}
-          />
+          <CardAluno item={item} avaliar editar navigation={navigation} />
         )}
         keyExtractor={item => item.uid}
         //extraData={selected}
