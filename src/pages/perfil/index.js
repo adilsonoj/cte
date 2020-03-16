@@ -108,8 +108,14 @@ const perfil = ({userStore, updateUserLogged, updateUserPhotoURL}) => {
       console.log(url);
       updateUserPhotoURL(url);
       setUser({...user, photoURL: url});
+
+      const userDoc = firestore().doc(`users/${uid.trim()}`);
+      await userDoc.update({
+        photoURL: url,
+      });
     } catch (error) {
       console.log(error);
+    } finally {
     }
   };
 
@@ -142,6 +148,7 @@ const perfil = ({userStore, updateUserLogged, updateUserPhotoURL}) => {
       displayName: user.displayName,
       email: user.email,
       photoURL: user.photoURL,
+      uid: user.uid,
       objetivos,
     };
 
