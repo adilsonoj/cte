@@ -1,6 +1,12 @@
 import React from 'react';
 
-import {ScrollView, Text, View, StatusBar} from 'react-native';
+import {
+  ScrollView,
+  Text,
+  View,
+  StatusBar,
+  TouchableOpacity,
+} from 'react-native';
 import {DrawerActions, DrawerRouter} from 'react-navigation-drawer';
 import {NavigationActions, SwitchActions} from 'react-navigation';
 import auth from '@react-native-firebase/auth';
@@ -38,120 +44,144 @@ const DrawerScreen = props => {
     <View>
       <StatusBar backgroundColor={Theme.primaryDark} barStyle="light-content" />
       <ScrollView>
-        <View
-          style={[
-            styles.item,
-            props.activeItemKey == 'CTE' ? styles.activeItem : null,
-          ]}>
-          <Icon
-            name="home"
-            size={20}
+        <TouchableOpacity onPress={navigateToScreen('CTE')}>
+          <View
             style={[
-              styles.icon,
-              props.activeItemKey == 'CTE' ? styles.activeIcon : null,
-            ]}
-          />
-          <Text
+              styles.item,
+              props.activeItemKey == 'CTE' ? styles.activeItem : null,
+            ]}>
+            <Icon
+              name="home"
+              size={20}
+              style={[
+                styles.icon,
+                props.activeItemKey == 'CTE' ? styles.activeIcon : null,
+              ]}
+            />
+            <Text
+              style={[
+                styles.text,
+                props.activeItemKey == 'CTE' ? styles.activeText : null,
+              ]}>
+              Home
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={navigateToScreen('Perfil')}>
+          <View
             style={[
-              styles.text,
-              props.activeItemKey == 'CTE' ? styles.activeText : null,
-            ]}
-            onPress={navigateToScreen('CTE')}>
-            Home
-          </Text>
-        </View>
-
-        <View
-          style={[
-            styles.item,
-            props.activeItemKey == 'Perfil' ? styles.activeItem : null,
-          ]}>
-          <Icon
-            name="user"
-            size={20}
+              styles.item,
+              props.activeItemKey == 'Perfil' ? styles.activeItem : null,
+            ]}>
+            <Icon
+              name="user"
+              size={20}
+              style={[
+                styles.icon,
+                props.activeItemKey == 'Perfil' ? styles.activeIcon : null,
+              ]}
+            />
+            <Text
+              style={[
+                styles.text,
+                props.activeItemKey == 'Perfil' ? styles.activeText : null,
+              ]}>
+              Perfil
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={navigateToScreen('Sobre')}>
+          <View
             style={[
-              styles.icon,
-              props.activeItemKey == 'Perfil' ? styles.activeIcon : null,
-            ]}
-          />
-          <Text
+              styles.item,
+              props.activeItemKey == 'Sobre' ? styles.activeItem : null,
+            ]}>
+            <Icon
+              name="address-card"
+              size={20}
+              style={[
+                styles.icon,
+                props.activeItemKey == 'Sobre' ? styles.activeIcon : null,
+              ]}
+            />
+            <Text
+              style={[
+                styles.text,
+                props.activeItemKey == 'Sobre' ? styles.activeText : null,
+              ]}>
+              Sobre
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={navigateToScreen('Settings')}>
+          <View
             style={[
-              styles.text,
-              props.activeItemKey == 'Perfil' ? styles.activeText : null,
-            ]}
-            onPress={navigateToScreen('Perfil')}>
-            Perfil
-          </Text>
-        </View>
-
-        <View
-          style={[
-            styles.item,
-            props.activeItemKey == 'Sobre' ? styles.activeItem : null,
-          ]}>
-          <Icon
-            name="address-card"
-            size={20}
+              styles.item,
+              props.activeItemKey == 'Settings' ? styles.activeItem : null,
+            ]}>
+            <Icon
+              name="cog"
+              size={20}
+              style={[
+                styles.icon,
+                props.activeItemKey == 'Settings' ? styles.activeIcon : null,
+              ]}
+            />
+            <Text
+              style={[
+                styles.text,
+                props.activeItemKey == 'Settings' ? styles.activeText : null,
+              ]}>
+              Configurações
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={logout('Login')}>
+          <View
             style={[
-              styles.icon,
-              props.activeItemKey == 'Sobre' ? styles.activeIcon : null,
-            ]}
-          />
-          <Text
+              styles.item,
+              props.activeItemKey == 'Login' ? styles.activeItem : null,
+            ]}>
+            <Icon
+              name="sign-out"
+              size={20}
+              style={[
+                styles.icon,
+                props.activeItemKey == 'Login' ? styles.activeIcon : null,
+              ]}
+            />
+            <Text
+              style={[
+                styles.text,
+                props.activeItemKey == 'Login' ? styles.activeText : null,
+              ]}>
+              Sair
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={navigateToScreen('Alunos')}>
+          <View
             style={[
-              styles.text,
-              props.activeItemKey == 'Sobre' ? styles.activeText : null,
-            ]}
-            onPress={navigateToScreen('Sobre')}>
-            Sobre
-          </Text>
-        </View>
-
-        <View
-          style={[
-            styles.item,
-            props.activeItemKey == 'Settings' ? styles.activeItem : null,
-          ]}>
-          <Icon
-            name="cog"
-            size={20}
-            style={[
-              styles.icon,
-              props.activeItemKey == 'Settings' ? styles.activeIcon : null,
-            ]}
-          />
-          <Text
-            style={[
-              styles.text,
-              props.activeItemKey == 'Settings' ? styles.activeText : null,
-            ]}
-            onPress={navigateToScreen('Settings')}>
-            Configurações
-          </Text>
-        </View>
-
-        <View
-          style={[
-            styles.item,
-            props.activeItemKey == 'Lggin' ? styles.activeItem : null,
-          ]}>
-          <Icon
-            name="sign-out"
-            size={20}
-            style={[
-              styles.icon,
-              props.activeItemKey == 'Login' ? styles.activeIcon : null,
-            ]}
-          />
-          <Text
-            style={[
-              styles.text,
-              props.activeItemKey == 'Login' ? styles.activeText : null,
-            ]}
-            onPress={logout('Login')}>
-            Sair
-          </Text>
-        </View>
+              styles.item,
+              props.activeItemKey == 'Alunos' ? styles.activeItem : null,
+            ]}>
+            <Icon
+              name="sign-out"
+              size={20}
+              style={[
+                styles.icon,
+                props.activeItemKey == 'Alunos' ? styles.activeIcon : null,
+              ]}
+            />
+            <Text
+              style={[
+                styles.text,
+                props.activeItemKey == 'Alunos' ? styles.activeText : null,
+              ]}>
+              Alunos
+            </Text>
+          </View>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
