@@ -32,7 +32,7 @@ const perfil = ({userStore, updateUserLogged, updateUserPhotoURL}) => {
   const [data, setData] = useState(new Date());
   const [show, setShow] = useState(false);
   const [novo, setNovo] = useState(false);
-  const [avatar, setAvatar] = useState('');
+  const [avatar, setAvatar] = useState({uri: userStore.photoURL});
   const uid = auth().currentUser && auth().currentUser.uid;
 
   const options = {
