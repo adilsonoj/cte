@@ -335,7 +335,7 @@ const vo2 = ({navigation}) => {
           onDateSelected={onDateSelected}
           minDate={moment()}
         />
-        <CardAluno avaliar trocar item={aluno} />
+        <CardAluno avaliar trocar item={aluno} navigation={navigation} />
 
         <View style={styles.variacoes}>
           <View style={styles.item}>

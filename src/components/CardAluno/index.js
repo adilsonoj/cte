@@ -62,6 +62,11 @@ const CardAluno = ({item, avaliar, trocar, editar, navigation}) => {
     navigation.navigate('Vo2', {item: aluno});
   };
 
+  const navigateAlunos = () => {
+    menu.current.hide();
+    navigation.navigate('Alunos');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.cardAluno}>
@@ -82,7 +87,9 @@ const CardAluno = ({item, avaliar, trocar, editar, navigation}) => {
         <TouchableOpacity onPress={showMenu}>
           <View style={styles.menu}>
             <Menu ref={menu} button={<></>}>
-              {trocar && <MenuItem onPress={() => {}}>Trocar Aluno</MenuItem>}
+              {trocar && (
+                <MenuItem onPress={navigateAlunos}>Trocar Aluno</MenuItem>
+              )}
               {editar && (
                 <MenuItem onPress={showPlanilha}>Editar Planilha</MenuItem>
               )}
