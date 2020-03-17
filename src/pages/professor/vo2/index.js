@@ -1,5 +1,11 @@
-import React, {useState, useEffect, useLayoutEffect} from 'react';
-import {View, SafeAreaView, Text, TouchableOpacity} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  ToastAndroid,
+} from 'react-native';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 import firestore from '@react-native-firebase/firestore';
@@ -24,10 +30,10 @@ const vo2 = ({navigation}) => {
     un: 'km',
     ritimo: 'lento',
   };
-  let _date = moment();
+  let _date = moment().format();
 
+  const [loading, setLoading] = useState(false);
   const [dataSelecionada, setDataSelecionada] = useState(new Date());
-  const [currentDateIndex, setCurrentDateIndex] = useState(null);
   const [aquecimento, setAquecimento] = useState(inicial);
   const [indexAquecimento, setIndexAquencimento] = useState([0, 0, 0]);
   const [desenvolvimento, setDesenvolvimento] = useState(
@@ -45,7 +51,7 @@ const vo2 = ({navigation}) => {
   const [aluno, setAluno] = useState(navigation.getParam('item'));
   const [markedDates, setMarkedDates] = useState([]);
   const [weekStart, setWeekStart] = useState(_date);
-  // let markedDates = [];
+  const [userDoc, setUserDoc] = useState('');
   let customDatesStyles = [];
   const [un, setUn] = useState(['km', 'm']);
   const ritimo = ['lento', 'moderado', 'rápido'];
@@ -80,24 +86,21 @@ const vo2 = ({navigation}) => {
   };
 
   customDatesStyles.push({
-    startDate: _date, // Single date since no endDate provided
-    //dateNameStyle: {color: 'blue'},
-    // dateNumberStyle: {color: 'purple'},
-    // Random color...
-    // dateContainerStyle: { backgroundColor: `#${(`#00000${(Math.random() * (1 << 24) | 0).toString(16)}`).slice(-6)}` },
+    startDate: _date,
   });
 
-  const onLoad = async () => {
-    const userDoc = await firestore()
-      .doc(`users/${aluno.uid.trim()}`)
-      .get();
-    console.log(userDoc._data);
+  const getPontos = async () => {
+    let userDocRef = await firestore().doc(`users/${aluno.uid.trim()}`);
 
-    const {treinos} = userDoc._data;
-    console.log(treinos);
+    setUserDoc(userDocRef);
+
+    userDocRef = await userDocRef.get();
+
+    if (!userDocRef._data.treinos) return;
+
+    const {treinos} = userDocRef._data;
     const markeds = [];
     treinos.forEach((treino, i) => {
-      console.log(moment(treino.data._seconds * 1000));
       markeds.push({
         date: moment(treino.data._seconds * 1000),
         dots: [
@@ -110,10 +113,12 @@ const vo2 = ({navigation}) => {
       });
     });
     setMarkedDates(markeds);
+    setLoading(false);
   };
   useEffect(() => {
-    onLoad();
+    getPontos();
   }, []);
+
   useEffect(() => {
     changeUn();
   }, [percurso]);
@@ -229,14 +234,6 @@ const vo2 = ({navigation}) => {
     let pace = 60 / velocTreino.toFixed(2);
     let vo2PerCent = (vo2Treino.toFixed(2) * 100) / vo2Max;
 
-    console.log('vo2Max', vo2Max);
-    console.log('intensidad', intensidad);
-    console.log('vo2Basal', vo2Basal);
-    console.log('vo2Treino', vo2Treino);
-    console.log('velocTreino', velocTreino);
-    console.log('pace', pace);
-    console.log('vo2PerCent', Math.round(vo2PerCent));
-
     setVo2Treino(Math.round(vo2PerCent));
     setDesenvolvimento({...desenvolvimento, ritimo: pace.toFixed(2)});
   };
@@ -259,24 +256,65 @@ const vo2 = ({navigation}) => {
   };
 
   const onDateSelected = date => {
-    setDataSelecionada(date);
+    setDataSelecionada(moment(date)._d);
     console.log(dataSelecionada);
   };
 
   const addTreino = async () => {
-    let treino = {
-      data: dataSelecionada,
-      aquecimento,
-      desenvolvimento,
-      calma,
-      intensidade,
-      vo2Treino,
-    };
-    const userDoc = firestore().doc(`users/${aluno.uid.trim()}`);
-    await userDoc.update({
-      treinos: [treino],
-    });
-    console.log(treino);
+    setLoading(true);
+    try {
+      let user = await userDoc.get();
+      let sendTreinos;
+      let treino = {
+        data: dataSelecionada,
+        aquecimento,
+        desenvolvimento,
+        calma,
+        intensidade,
+        vo2Treino,
+      };
+      let {treinos} = user._data;
+
+      if (!treinos) {
+        sendTreinos = [treino];
+      } else {
+        const ele = treinos.filter(el => {
+          if (moment(dataSelecionada).isSame(moment(el.data._seconds * 1000))) {
+            return true;
+          }
+        });
+        if (ele.length > 0) {
+          setLoading(false);
+          ToastAndroid.show(
+            'Já existe uma planilha para essa data!',
+            ToastAndroid.LONG,
+          );
+          return;
+        }
+        console.log(dataSelecionada);
+        if (moment(dataSelecionada).isBefore(moment())) {
+          setLoading(false);
+          ToastAndroid.show(
+            'A data deve ser maior que a data de hoje!',
+            ToastAndroid.LONG,
+          );
+          return;
+        }
+
+        treinos.push(treino);
+        sendTreinos = treinos;
+      }
+
+      await userDoc.update({
+        treinos: sendTreinos,
+      });
+
+      ToastAndroid.show('Planilha adicionada', ToastAndroid.LONG);
+
+      getPontos();
+    } catch (error) {
+      ToastAndroid.show('Erro inesperado, tente novamente!', ToastAndroid.LONG);
+    }
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -294,7 +332,8 @@ const vo2 = ({navigation}) => {
           onWeekChanged={week => setWeekStart(week)}
           customDatesStyles={customDatesStyles}
           markedDates={markedDates}
-          onDateSelected={date => setDataSelecionada(date)}
+          onDateSelected={onDateSelected}
+          minDate={moment()}
         />
         <CardAluno avaliar trocar item={aluno} />
 
@@ -337,7 +376,12 @@ const vo2 = ({navigation}) => {
           changeValue={dialogCalma}
         />
         <View style={{paddingVertical: 16}}>
-          <Button mode="contained" color={theme.button} onPress={addTreino}>
+          <Button
+            icon="content-save"
+            loading={loading}
+            mode="contained"
+            color={theme.button}
+            onPress={addTreino}>
             Adicionar Treino
           </Button>
         </View>
