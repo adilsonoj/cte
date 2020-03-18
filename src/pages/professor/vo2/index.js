@@ -291,8 +291,9 @@ const vo2 = ({navigation}) => {
           );
           return;
         }
-        console.log(dataSelecionada);
-        if (moment(dataSelecionada).isBefore(moment())) {
+        console.log(moment(dataSelecionada, 'yyyy-mm-dd'));
+        console.log(moment(new Date(), 'yyyy-mm-dd'));
+        if (moment(dataSelecionada).isBefore(moment(), 'day')) {
           setLoading(false);
           ToastAndroid.show(
             'A data deve ser maior que a data de hoje!',
@@ -313,7 +314,9 @@ const vo2 = ({navigation}) => {
 
       getPontos();
     } catch (error) {
+      console.log(error);
       ToastAndroid.show('Erro inesperado, tente novamente!', ToastAndroid.LONG);
+      setLoading(false);
     }
   };
   return (
