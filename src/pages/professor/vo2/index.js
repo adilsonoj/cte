@@ -272,6 +272,7 @@ const vo2 = ({navigation}) => {
         calma,
         intensidade,
         vo2Treino,
+        feedback: false,
       };
       let {treinos} = user._data;
 
