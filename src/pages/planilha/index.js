@@ -16,6 +16,7 @@ import styles from './styles';
 
 const planilha = ({navigation, userStore}) => {
   const [treinos, setTreinos] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
   const {uid} = userStore;
 
   const getDados = async () => {
@@ -24,26 +25,44 @@ const planilha = ({navigation, userStore}) => {
       .get();
 
     console.log(user.data().treinos);
-
-    setTreinos(user.data().treinos);
+    let list = user.data().treinos.sort((a, b) => {
+      return moment(a.data._seconds * 1000).isAfter(
+        moment(b.data._seconds * 1000),
+      )
+        ? 1
+        : moment(a.data._seconds * 1000).isBefore(
+            moment(b.data._seconds * 1000),
+          )
+        ? -1
+        : 0;
+    });
+    setTreinos(list);
+    setRefreshing(false);
   };
 
   useEffect(() => {
     getDados();
   }, []);
 
+  const onRefresh = () => {
+    setRefreshing(true);
+    getDados();
+  };
+
   const Itens = ({item}) => {
     return (
-      <ScrollView>
+      <View>
         <View style={styles.header}>
           <Text style={styles.headerText}>
-            Semana 5 - Dia{' '}
-            {moment(item.data._seconds * 1000).format('D [de] MMMM [de] YYYY')}
+            {moment(item.data._seconds * 1000).format(' MMMM [dia] D')}
           </Text>
           <TouchableWithoutFeedback
             onPress={() => {
               navigation.dispatch(
-                NavigationActions.navigate({routeName: 'FeedBack'}),
+                NavigationActions.navigate(
+                  {routeName: 'FeedBack'},
+                  {item: item},
+                ),
               );
             }}>
             <Text style={styles.headerFeedBack}>feedBack</Text>
@@ -72,7 +91,7 @@ const planilha = ({navigation, userStore}) => {
             <Text style={[styles.font, styles.cardTitle]}>Volta a calma</Text>
             <Text style={[styles.font, styles.cardValue]}>
               {item.calma.distancia}
-              {item.calma.un} - {item.calma.distancia}
+              {item.calma.un} - {item.calma.ritimo}
             </Text>
           </View>
           <View style={styles.box}>
@@ -80,16 +99,18 @@ const planilha = ({navigation, userStore}) => {
             <Text style={[styles.font, styles.cardValue]}>160 Bpm</Text>
           </View>
         </View>
-      </ScrollView>
+      </View>
     );
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
+        onRefresh={onRefresh}
+        refreshing={refreshing}
         data={treinos}
         renderItem={({item}) => <Itens item={item} />}
-        keyExtractor={(_, i) => i}
+        keyExtractor={(_, i) => i.toString()}
       />
     </SafeAreaView>
   );
