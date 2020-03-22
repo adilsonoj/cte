@@ -5,14 +5,13 @@ import {createDrawerNavigator} from 'react-navigation-drawer';
 import {createStackNavigator} from 'react-navigation-stack';
 
 import Sobre from '../pages/about';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import TabNavigator from './TabNavigator';
 import DrawerScreen from '../components/DrawerSceen';
 import DrawerItems from '../components/DrawerItens';
 import Login from '../pages/login';
 import Perfil from '../pages/perfil';
 import Registro from '../pages/Registro';
-import Logout from './Logout';
 import LoginOrHome from '../pages/LoginOrHome';
 import FeedBack from '../pages/feedBack';
 import Vo2 from '../pages/professor/vo2';
@@ -23,14 +22,41 @@ const DrawerNavigator = createDrawerNavigator(
   {
     CTE: {
       screen: TabNavigator,
-      title: 'CTE',
       navigationOptions: {
-        drawerIcon: () => <Icon name="home" size={20} />,
+        title: 'Home',
+        drawerIcon: ({tintColor}) => (
+          <Icon name="home" size={20} color={tintColor} />
+        ),
       },
     },
-    Sobre,
-    Perfil,
-    Logout,
+
+    Perfil: {
+      screen: Perfil,
+      navigationOptions: () => ({
+        title: `Perfil`,
+        drawerIcon: ({tintColor}) => (
+          <Icon name="account" size={20} color={tintColor} />
+        ),
+      }),
+    },
+    Alunos: {
+      screen: Alunos,
+      navigationOptions: () => ({
+        drawerLabel: 'Alunos',
+        drawerIcon: ({tintColor}) => (
+          <Icon name="account-multiple" size={20} color={tintColor} />
+        ),
+      }),
+    },
+    Sobre: {
+      screen: Sobre,
+      navigationOptions: () => ({
+        title: `Sobre`,
+        drawerIcon: ({tintColor}) => (
+          <Icon name="information-variant" size={20} color={tintColor} />
+        ),
+      }),
+    },
   },
 
   {
@@ -53,14 +79,14 @@ const DrawerNavigator = createDrawerNavigator(
               }),
             );
           }}>
-          <Icon name="home" size={20} color={theme.iconColor} />
+          <Icon name="home" size={30} color={theme.iconColor} />
         </TouchableOpacity>
       ),
       headerLeft: (
         <TouchableOpacity
           style={{marginLeft: 16}}
           onPress={navigation.toggleDrawer}>
-          <Icon name="bars" size={20} color={theme.iconColor} />
+          <Icon name="menu" size={30} color={theme.iconColor} />
         </TouchableOpacity>
       ),
     }),
@@ -94,12 +120,7 @@ const AppStackNavigator = createStackNavigator(
         title: `Planilha VO2`,
       }),
     },
-    Alunos: {
-      screen: Alunos,
-      navigationOptions: () => ({
-        title: `Alunos`,
-      }),
-    },
+
     LoginOrHome: {
       screen: LoginOrHome,
       navigationOptions: () => ({
@@ -132,7 +153,7 @@ const AppStackNavigator = createStackNavigator(
     },
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'LoginOrHome',
     defaultNavigationOptions: () => ({
       headerStyle: {
         backgroundColor: theme.headerColor,
