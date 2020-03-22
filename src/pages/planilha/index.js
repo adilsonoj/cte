@@ -16,11 +16,10 @@ import styles from './styles';
 const planilha = ({navigation, userStore}) => {
   const [treinos, setTreinos] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const {uid} = userStore;
 
   const getDados = async () => {
     const user = await firestore()
-      .doc(`users/${uid.trim()}`)
+      .doc(`users/${userStore.uid.trim()}`)
       .get();
 
     console.log(user.data().treinos);
