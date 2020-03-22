@@ -70,7 +70,9 @@ const CardAluno = ({item, avaliar, trocar, editar, navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.cardAluno}>
-        <Image source={{uri: aluno.photoURL}} style={styles.avatar}></Image>
+        <Image
+          source={{uri: aluno && aluno.photoURL}}
+          style={styles.avatar}></Image>
         <View style={styles.info}>
           <View>
             <Text style={styles.textNome}>{aluno.displayName}</Text>

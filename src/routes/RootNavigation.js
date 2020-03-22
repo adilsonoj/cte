@@ -8,6 +8,7 @@ import Sobre from '../pages/about';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import TabNavigator from './TabNavigator';
 import DrawerScreen from '../components/DrawerSceen';
+import DrawerItems from '../components/DrawerItens';
 import Login from '../pages/login';
 import Perfil from '../pages/perfil';
 import Registro from '../pages/Registro';
@@ -20,7 +21,13 @@ import theme from '../themes/white';
 
 const DrawerNavigator = createDrawerNavigator(
   {
-    CTE: TabNavigator,
+    CTE: {
+      screen: TabNavigator,
+      title: 'CTE',
+      navigationOptions: {
+        drawerIcon: () => <Icon name="home" size={20} />,
+      },
+    },
     Sobre,
     Perfil,
     Logout,
@@ -29,7 +36,7 @@ const DrawerNavigator = createDrawerNavigator(
   {
     initialRouteName: 'CTE',
     drawerBackgroundColor: '#FFFFFF',
-    contentComponent: DrawerScreen,
+    contentComponent: DrawerItems,
     navigationOptions: ({navigation}) => ({
       headerStyle: {
         backgroundColor: theme.headerColor,
@@ -57,6 +64,15 @@ const DrawerNavigator = createDrawerNavigator(
         </TouchableOpacity>
       ),
     }),
+    contentOptions: {
+      activeTintColor: theme.primary,
+      itemsContainerStyle: {
+        marginVertical: 0,
+      },
+      iconContainerStyle: {
+        opacity: 1,
+      },
+    },
   },
 );
 

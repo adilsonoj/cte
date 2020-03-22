@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   ToastAndroid,
+  ScrollView,
 } from 'react-native';
 import moment from 'moment';
 import 'moment/locale/pt-br';
@@ -15,9 +16,55 @@ import {openDialog} from 'rn-android-picker-dialog';
 import CardAluno from '../../../components/CardAluno';
 import InputPlanilha from '../../../components/InputPlanilha';
 import theme from '../../../themes/white';
-
 import styles from './styles';
-import {ScrollView} from 'react-native-gesture-handler';
+
+const Planilha = () => {
+  return (
+    <View>
+      <View style={styles.planilhaHeader}>
+        <Text style={styles.planilhaHeaderText}>Data selecionada</Text>
+        <Text style={styles.planilhaHeaderFeedBack}>feedBack</Text>
+      </View>
+      <View style={styles.planilhaContainer}>
+        <View style={styles.planilhaBox}>
+          <Text style={[styles.planilhaFont, styles.planilhaCardTitle]}>
+            Aquecimento
+          </Text>
+          <Text style={[styles.planilhaFont, styles.planilhaCardValue]}>
+            10km - lento
+          </Text>
+        </View>
+        <View style={styles.planilhaBox}>
+          <Text style={[styles.planilhaFont, styles.planilhaCardTitle]}>
+            Desenvolvimento
+          </Text>
+          <Text style={[styles.planilhaFont, styles.planilhaCardValue]}>
+            10km a 6'30"
+          </Text>
+        </View>
+      </View>
+      <View style={styles.planilhaContainer}>
+        <View style={styles.planilhaBox}>
+          <Text style={[styles.planilhaFont, styles.planilhaCardTitle]}>
+            Volta a calma
+          </Text>
+          <Text style={[styles.planilhaFont, styles.planilhaCardValue]}>
+            10km - lento
+          </Text>
+        </View>
+        <View style={styles.planilhaBox}>
+          <Text style={[styles.planilhaFont, styles.planilhaCardTitle]}>
+            VO2 Treino
+          </Text>
+          <Text style={[styles.planilhaFont, styles.planilhaCardValue]}>
+            53%
+          </Text>
+        </View>
+      </View>
+    </View>
+  );
+};
+
 const vo2 = ({navigation}) => {
   const desenvolvimentoInicial = {
     distancia: 0,
@@ -43,7 +90,6 @@ const vo2 = ({navigation}) => {
   const [calma, setCalma] = useState(inicial);
   const [indexCalma, setIndexCalma] = useState([0, 0, 0]);
   const [vo2Treino, setVo2Treino] = useState(50);
-  const [indexVo2, setIndexVo2] = useState([0]);
   const [intensidade, setIntensidade] = useState(50);
   const [indexIntensidade, setIndexIntensidade] = useState([0]);
   const [percurso, setPercurso] = useState('Distância');
@@ -170,7 +216,8 @@ const vo2 = ({navigation}) => {
   };
 
   const dialogCalma = async () => {
-    const inputs = [distancia, un, ritimo];
+    const distanciaCalma = [1, 2, 3, 500];
+    const inputs = [distanciaCalma, un, ritimo];
     const selectedValues = indexCalma;
     const options = {
       dialogTitle: 'Volta a calma',
@@ -179,28 +226,11 @@ const vo2 = ({navigation}) => {
       const result = await openDialog(inputs, selectedValues, options);
       if (result) {
         setCalma({
-          distancia: result[0],
+          distancia: distanciaCalma[result[0]],
           un: un[result[1]],
           ritimo: ritimo[result[2]],
         });
         setIndexCalma([result[0], result[1], result[2]]);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const dialogVo2 = async () => {
-    const inputs = [porcento];
-    const selectedValues = indexVo2;
-    const options = {
-      dialogTitle: 'Vo2',
-    };
-    try {
-      const result = await openDialog(inputs, selectedValues, options);
-      if (result) {
-        setVo2Treino(porcento[result[0]]);
-        setIndexVo2([result[0]]);
       }
     } catch (error) {
       console.log(error);
@@ -292,8 +322,6 @@ const vo2 = ({navigation}) => {
           );
           return;
         }
-        console.log(moment(dataSelecionada, 'yyyy-mm-dd'));
-        console.log(moment(new Date(), 'yyyy-mm-dd'));
         if (moment(dataSelecionada).isBefore(moment(), 'day')) {
           setLoading(false);
           ToastAndroid.show(
@@ -342,12 +370,8 @@ const vo2 = ({navigation}) => {
         <CardAluno avaliar trocar item={aluno} navigation={navigation} />
 
         <View style={styles.variacoes}>
-          <View style={styles.item}>
-            <Text style={styles.titulo}>Vo2 Treino</Text>
-            <Text>{`${vo2Treino}%`}</Text>
-          </View>
           <TouchableOpacity onPress={dialogIntensidade}>
-            <View style={[styles.item, styles.border]}>
+            <View style={styles.item}>
               <Text style={styles.titulo}>Intensidade</Text>
               <Text>{`${intensidade}%`}</Text>
             </View>
@@ -359,6 +383,7 @@ const vo2 = ({navigation}) => {
             </View>
           </TouchableOpacity>
         </View>
+        <Planilha />
         <InputPlanilha
           titulo="Aquecimento"
           valor={aquecimento && `${aquecimento.distancia}${aquecimento.un}`}

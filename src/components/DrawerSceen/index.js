@@ -1,17 +1,11 @@
 import React from 'react';
 
-import {
-  ScrollView,
-  Text,
-  View,
-  StatusBar,
-  TouchableOpacity,
-} from 'react-native';
+import {ScrollView, Text, View, TouchableOpacity} from 'react-native';
 import {DrawerActions, DrawerRouter} from 'react-navigation-drawer';
-import {NavigationActions, SwitchActions} from 'react-navigation';
+import {NavigationActions} from 'react-navigation';
 import auth from '@react-native-firebase/auth';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Theme from '../../themes/white';
+// import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from './styles';
 
 import {connect} from 'react-redux';
@@ -42,7 +36,6 @@ const DrawerScreen = props => {
 
   return (
     <View>
-      <StatusBar backgroundColor={Theme.primaryDark} barStyle="light-content" />
       <ScrollView>
         <TouchableOpacity onPress={navigateToScreen('CTE')}>
           <View
@@ -74,7 +67,7 @@ const DrawerScreen = props => {
               props.activeItemKey == 'Perfil' ? styles.activeItem : null,
             ]}>
             <Icon
-              name="user"
+              name="account"
               size={20}
               style={[
                 styles.icon,
@@ -90,29 +83,6 @@ const DrawerScreen = props => {
             </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={navigateToScreen('Sobre')}>
-          <View
-            style={[
-              styles.item,
-              props.activeItemKey == 'Sobre' ? styles.activeItem : null,
-            ]}>
-            <Icon
-              name="address-card"
-              size={20}
-              style={[
-                styles.icon,
-                props.activeItemKey == 'Sobre' ? styles.activeIcon : null,
-              ]}
-            />
-            <Text
-              style={[
-                styles.text,
-                props.activeItemKey == 'Sobre' ? styles.activeText : null,
-              ]}>
-              Sobre
-            </Text>
-          </View>
-        </TouchableOpacity>
         <TouchableOpacity onPress={navigateToScreen('Settings')}>
           <View
             style={[
@@ -120,7 +90,7 @@ const DrawerScreen = props => {
               props.activeItemKey == 'Settings' ? styles.activeItem : null,
             ]}>
             <Icon
-              name="cog"
+              name="tune"
               size={20}
               style={[
                 styles.icon,
@@ -136,29 +106,6 @@ const DrawerScreen = props => {
             </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={logout('Login')}>
-          <View
-            style={[
-              styles.item,
-              props.activeItemKey == 'Login' ? styles.activeItem : null,
-            ]}>
-            <Icon
-              name="sign-out"
-              size={20}
-              style={[
-                styles.icon,
-                props.activeItemKey == 'Login' ? styles.activeIcon : null,
-              ]}
-            />
-            <Text
-              style={[
-                styles.text,
-                props.activeItemKey == 'Login' ? styles.activeText : null,
-              ]}>
-              Sair
-            </Text>
-          </View>
-        </TouchableOpacity>
         <TouchableOpacity onPress={navigateToScreen('Alunos')}>
           <View
             style={[
@@ -166,7 +113,7 @@ const DrawerScreen = props => {
               props.activeItemKey == 'Alunos' ? styles.activeItem : null,
             ]}>
             <Icon
-              name="sign-out"
+              name="account-multiple"
               size={20}
               style={[
                 styles.icon,
@@ -179,6 +126,52 @@ const DrawerScreen = props => {
                 props.activeItemKey == 'Alunos' ? styles.activeText : null,
               ]}>
               Alunos
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={navigateToScreen('Sobre')}>
+          <View
+            style={[
+              styles.item,
+              props.activeItemKey == 'Sobre' ? styles.activeItem : null,
+            ]}>
+            <Icon
+              name="information-variant"
+              size={20}
+              style={[
+                styles.icon,
+                props.activeItemKey == 'Sobre' ? styles.activeIcon : null,
+              ]}
+            />
+            <Text
+              style={[
+                styles.text,
+                props.activeItemKey == 'Sobre' ? styles.activeText : null,
+              ]}>
+              Sobre
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={logout('Login')}>
+          <View
+            style={[
+              styles.item,
+              props.activeItemKey == 'Login' ? styles.activeItem : null,
+            ]}>
+            <Icon
+              name="logout"
+              size={20}
+              style={[
+                styles.icon,
+                props.activeItemKey == 'Login' ? styles.activeIcon : null,
+              ]}
+            />
+            <Text
+              style={[
+                styles.text,
+                props.activeItemKey == 'Login' ? styles.activeText : null,
+              ]}>
+              Sair
             </Text>
           </View>
         </TouchableOpacity>
