@@ -13,7 +13,6 @@ const LoginOrHome = props => {
 
   const getUser = async () => {
     try {
-      console.log(props.user);
       if (props.user && Object.entries(props.user).length !== 0) {
         props.navigation.navigate('Home');
       } else {
