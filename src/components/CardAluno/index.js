@@ -21,7 +21,7 @@ const CardAluno = ({item, avaliar, trocar, editar, navigation}) => {
     });
   };
   const kms = getList(5, 'km');
-  const mts = getList(1000, 'm');
+  const mts = getList(100, 'm');
   const showMenu = () => {
     menu.current.show();
   };
@@ -39,7 +39,7 @@ const CardAluno = ({item, avaliar, trocar, editar, navigation}) => {
   };
 
   const vo2m = async (km, m) => {
-    let d = km * 1000 + m;
+    let d = km * 1000 + m * 10;
     let vo2m = (d - 504) / 45;
     try {
       const user = firestore().doc(`users/${aluno.uid.trim()}`);
