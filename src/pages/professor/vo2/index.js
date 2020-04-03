@@ -14,56 +14,8 @@ import CalendarStrip from 'react-native-calendar-strip';
 import {Button} from 'react-native-paper';
 import {openDialog} from 'rn-android-picker-dialog';
 import CardAluno from '../../../components/CardAluno';
-import InputPlanilha from '../../../components/InputPlanilha';
 import theme from '../../../themes/white';
 import styles from './styles';
-
-const Planilha = () => {
-  return (
-    <View>
-      <View style={styles.planilhaHeader}>
-        <Text style={styles.planilhaHeaderText}>Data selecionada</Text>
-        <Text style={styles.planilhaHeaderFeedBack}>feedBack</Text>
-      </View>
-      <View style={styles.planilhaContainer}>
-        <View style={styles.planilhaBox}>
-          <Text style={[styles.planilhaFont, styles.planilhaCardTitle]}>
-            Aquecimento
-          </Text>
-          <Text style={[styles.planilhaFont, styles.planilhaCardValue]}>
-            10km - lento
-          </Text>
-        </View>
-        <View style={styles.planilhaBox}>
-          <Text style={[styles.planilhaFont, styles.planilhaCardTitle]}>
-            Desenvolvimento
-          </Text>
-          <Text style={[styles.planilhaFont, styles.planilhaCardValue]}>
-            10km a 6'30"
-          </Text>
-        </View>
-      </View>
-      <View style={styles.planilhaContainer}>
-        <View style={styles.planilhaBox}>
-          <Text style={[styles.planilhaFont, styles.planilhaCardTitle]}>
-            Volta a calma
-          </Text>
-          <Text style={[styles.planilhaFont, styles.planilhaCardValue]}>
-            10km - lento
-          </Text>
-        </View>
-        <View style={styles.planilhaBox}>
-          <Text style={[styles.planilhaFont, styles.planilhaCardTitle]}>
-            VO2 Treino
-          </Text>
-          <Text style={[styles.planilhaFont, styles.planilhaCardValue]}>
-            53%
-          </Text>
-        </View>
-      </View>
-    </View>
-  );
-};
 
 const vo2 = ({navigation}) => {
   const desenvolvimentoInicial = {
@@ -302,7 +254,7 @@ const vo2 = ({navigation}) => {
         calma,
         intensidade,
         vo2Treino,
-        feedback: false,
+        feedback: {},
       };
       let {treinos} = user._data;
 
@@ -383,27 +335,56 @@ const vo2 = ({navigation}) => {
             </View>
           </TouchableOpacity>
         </View>
-        <Planilha />
-        <InputPlanilha
-          titulo="Aquecimento"
-          valor={aquecimento && `${aquecimento.distancia}${aquecimento.un}`}
-          ritimo={aquecimento.ritimo}
-          changeValue={dialogAquecimento}
-        />
+        <View style={styles.planilhaHeader}>
+          <Text style={styles.planilhaHeaderText}>
+            {moment(dataSelecionada).format('LL')}
+          </Text>
+        </View>
+        <View style={styles.planilhaContainer}>
+          <TouchableOpacity onPress={dialogAquecimento}>
+            <View style={styles.planilhaBox}>
+              <Text style={[styles.planilhaFont, styles.planilhaCardTitle]}>
+                Aquecimento
+              </Text>
+              <Text style={[styles.planilhaFont, styles.planilhaCardValue]}>
+                {aquecimento &&
+                  `${aquecimento.distancia}${aquecimento.un} - ${aquecimento.ritimo}`}
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={dialogDesenvolvimento}>
+            <View style={styles.planilhaBox}>
+              <Text style={[styles.planilhaFont, styles.planilhaCardTitle]}>
+                Desenvolvimento
+              </Text>
+              <Text style={[styles.planilhaFont, styles.planilhaCardValue]}>
+                {`${desenvolvimento.distancia}${desenvolvimento.un} a ${desenvolvimento.ritimo} min/km`}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
 
-        <InputPlanilha
-          titulo="Desenvolvimento"
-          valor={`${desenvolvimento.distancia}${desenvolvimento.un}`}
-          ritimo={`${desenvolvimento.ritimo} min/km`}
-          changeValue={dialogDesenvolvimento}
-        />
+        <View style={styles.planilhaContainer}>
+          <TouchableOpacity onPress={dialogCalma}>
+            <View style={styles.planilhaBox}>
+              <Text style={[styles.planilhaFont, styles.planilhaCardTitle]}>
+                Volta a calma
+              </Text>
+              <Text style={[styles.planilhaFont, styles.planilhaCardValue]}>
+                {`${calma.distancia}${calma.un} - ${calma.ritimo}`}
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <View style={styles.planilhaBox}>
+            <Text style={[styles.planilhaFont, styles.planilhaCardTitle]}>
+              VO2 Treino
+            </Text>
+            <Text style={[styles.planilhaFont, styles.planilhaCardValue]}>
+              {`${vo2Treino}%`}
+            </Text>
+          </View>
+        </View>
 
-        <InputPlanilha
-          titulo="Volta a calma"
-          valor={`${calma.distancia}${calma.un}`}
-          ritimo={calma.ritimo}
-          changeValue={dialogCalma}
-        />
         <View style={{paddingVertical: 16}}>
           <Button
             icon="content-save"

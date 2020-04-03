@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
   item: {
     width: Dimensions.get('window').width / 2 - 18,
     alignItems: 'center',
-    height: 45,
+    justifyContent: 'center',
+    height: 55,
     backgroundColor: theme.backgroundCard,
     ...theme.shadow,
   },
@@ -46,8 +47,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   planilhaBox: {
-    width: Dimensions.get('screen').width / 2 - 18,
-    height: 50,
+    width: Dimensions.get('window').width / 2 - 18,
+    height: 55,
     alignItems: 'center',
     backgroundColor: theme.backgroundCard,
     marginBottom: 5,
@@ -58,9 +59,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 10,
   },
-  planilhaHeaderFeedBack: {
-    marginRight: 10,
-  },
+
   planilhaFont: {
     fontFamily: theme.font,
   },
