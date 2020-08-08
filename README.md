@@ -3,7 +3,7 @@ React-native-app for monitoring the evolution of running athletes
 
 > This repo contains the source code for App Android.
 
-<a href="url"><img src="https://github.com/adilsonoj/cte/blob/master/Screenshot.png" align="left" height="640" width="360" ></a>
+![Screenshot](./Screenshot.png)
 
 ## How it works?
 
